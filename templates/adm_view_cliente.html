@@ -1,0 +1,273 @@
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        button{
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >
+        <legend>Empresa</legend>
+
+        <div class="inline">
+            <label for="edtNome">Nome *</label>
+            <input type="text" id="edtNome" class="only-view" maxlength="50" disabled>
+            <label for="cmbTipo">Tipo</label>
+            <select id="cmbTipo" class="only-view" style="width: 150px;" disabled>
+                <option value="FIS">Física</option>
+                <option value="JUR" selected>Jurídica</option>
+            </select>
+        </div>
+        <div class="inline" id="divFANT">
+            <label for="edtFant" id="lblFant">Fantasia</label>
+            <input type="text" id="edtFant" class="only-view" maxlength="40" disabled>
+            <select id="cmbModal" style="max-width: 160px;">
+                <option value="FORN">Fornecedor</option>
+                <option value="CLI">Cliente</option>
+                <option value="BOTH" selected>Ambos</option>
+            </select>
+        </div>
+        <div class="inline" id="divJUR">
+            <label id="lblCNPJ" for="edtCNPJ">CNPJ*</label>
+            <input type="text" id="edtCNPJ" class="only-view" maxlength="18" disabled>
+            <label for="edtIncEst" class="juridica">Insc.Est.</label>
+            <input type="text" id="edtIncEst" class="juridica only-view" maxlength="15" onkeyup="valIE(this)" disabled>
+            <label for="edtInscMun" class="juridica">Insc.Mun.</label>
+            <input type="text" id="edtInscMun" class="juridica only-view"maxlength="14" disabled>
+        </div>
+
+        <div class="inline">
+            <label for="edtEnd">Endereço*</label>
+            <input type="text" id="edtEnd" class="only-view"maxlength="60" disabled>
+            <label for="edtNum">Num.</label>
+            <input type="text" id="edtNum" maxlength="6" class="only-view" style="width: 150px;" disabled>
+        </div>
+        <div class="inline">
+            <label for="edtCidade">Cidade</label>
+            <input type="text" id="edtCidade" class="only-view" maxlength="30" disabled>
+            <label for="cmbEstado">Estado</label> 
+            <select id="cmbEstado" class="only-view" style="width: 200px;" disabled>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapa</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="ES">Espirito Santo</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Para</option>
+                <option value="PB">Paraiba</option>
+                <option value="PR">Parana</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondonia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option selected="selected" value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>                    
+            </select>   
+        </div>
+        <div class="inline">            
+            <label for="edtBairro">Bairro</label>
+            <input type="text" id="edtBairro" class="only-view" maxlength="50" disabled>
+            <label for="edtCEP">CEP</label>
+            <input type="text" id="edtCEP" class="only-view" maxlength="10" onkeyup="valCEP(this)" style="width: 180px;" disabled>
+        </div>
+        <div class="inline"> 
+            <label for="edtTel">Tel</label>
+            <input type="text" id="edtTel" class="only-view" onkeyup="phone(this)" maxlength="15" disabled>
+            <label for="ckbWhats">Whatsapp</label>
+            <input type="checkbox" id="ckbWhats" class="only-view" checked disabled>
+            <input type="text" id="edtWhats" class="only-view" onkeyup="phone(this)" maxlength="15" disabled>
+        </div>
+        <div class="inline">            
+            <label for="edtBanco">Banco</label>
+            <input type="text" id="edtBanco" class="only-view" maxlength="15" disabled>
+            <label for="edtAG">Ag.</label>
+            <input type="text" id="edtAG" class="only-view" maxlength="6" style="width: 150px;" disabled>
+            <label for="edtCC">C.C.</label>
+            <input type="text" id="edtCC" maxlength="15" class="only-view" style="width: 250px;" disabled>
+        </div>
+        <div class="inline">            
+            <label for="edtPix">Chave Pix*</label>
+            <input type="text" id="edtPix" class="only-view" maxlength="40" disabled>
+        </div>
+
+        <div class="line">
+            <button id="btnCNPJ" disabled><span class="mdi mdi-card-account-details"></span>Cartão CNPJ</button>
+            <button id="btnEdit" disabled><span class="mdi mdi-note-edit"></span>Editar</button>
+            <button id="btnDel" disabled><span class="mdi mdi-delete"></span>Deletar</button>
+            <button id="btnSave" class="only-view" disabled><span class="mdi mdi-content-save"></span>Salvar</button>
+        </div>
+
+    </fieldset>
+
+
+</template>
+<script>
+    
+    const pageData = main_data.adm_view_cliente.data
+    const pageFunc = main_data.adm_view_cliente.func
+    const pageScreen = document.querySelector('#card-adm_view_cliente')
+    const novoReg = !(Object.keys(pageData).length)
+
+    function pageStart(){
+
+        juridica(1)
+
+        pageScreen.querySelector('#btnEdit').disabled = novoReg
+        pageScreen.querySelector('#btnCNPJ').disabled = novoReg || (pageData.tipo != 'JUR')
+        openFields(novoReg)
+        if (!novoReg){
+
+            pageScreen.querySelector('#edtNome').value = pageData.nome.toUpperCase()
+            pageScreen.querySelector('#cmbTipo').value =  pageData.tipo                        
+            pageScreen.querySelector('#edtCNPJ').value = pageData.cnpj_cpf
+            pageScreen.querySelector('#edtIncEst').value = pageData.ie
+            pageScreen.querySelector('#edtInscMun').value = pageData.im
+            pageScreen.querySelector('#edtEnd').value =  pageData.endereco.toUpperCase()
+            pageScreen.querySelector('#edtNum').value =  pageData.num
+            pageScreen.querySelector('#edtCidade').value = pageData.cidade.toUpperCase()
+            pageScreen.querySelector('#cmbEstado').value = pageData.estado
+            pageScreen.querySelector('#edtBairro').value = pageData.bairro.toUpperCase()
+            pageScreen.querySelector('#edtCEP').value = pageData.cep
+            pageScreen.querySelector('#edtTel').value = pageData.tel
+            pageScreen.querySelector('#edtBanco').value = pageData.bco_nome
+            pageScreen.querySelector('#edtAG').value = pageData.bco_ag
+            pageScreen.querySelector('#edtCC').value = pageData.bco_cc
+            pageScreen.querySelector('#edtPix').value = pageData.bco_pix
+            pageScreen.querySelector('#cmbModal').value = pageData.modal
+            pageScreen.querySelector('#edtWhats').value = pageData.whatsapp
+            pageScreen.querySelector('#ckbWhats').checked = false
+            pageScreen.querySelector('#edtFant').value = pageData.fantasia.toUpperCase() 
+            pageScreen.querySelector('#edtWhats').disabled = true
+            pageScreen.querySelector('#edtCNPJ').value = pageData.cnpj_cpf //(pageData.tipo == 'JUR') ? getCNPJ(pageData.cnpj_cpf) : getCPF(pageData.cnpj_cpf)
+            pageScreen.querySelector('#edtIncEst').value = (pageData.tipo == 'JUR') ? pageData.ie : ''
+            pageScreen.querySelector('#edtInscMun').value = (pageData.tipo == 'JUR') ? pageData.im : ''
+            juridica(pageData.tipo == 'JUR')
+
+        }
+    }
+
+    pageFunc.setEmp = (del=0)=>{
+
+        const whats = pageScreen.querySelector('#ckbWhats').checked
+        if(checkField(['edtNome','edtCNPJ','edtEnd','edtPix'])){
+            const razao_social = pageScreen.querySelector('#edtNome').value.trim().toUpperCase()
+            const params = new Object;
+            params.id = novoReg ? 0 : pageData.id
+            params.nome = del ? '' : razao_social
+            params.fantasia = pageScreen.querySelector('#edtFant').value.trim() == '' ? razao_social : pageScreen.querySelector('#edtFant').value.trim().toUpperCase()
+            params.tipo = pageScreen.querySelector('#cmbTipo').value
+            params.cnpj = pageScreen.querySelector('#edtCNPJ').value
+            params.ie = params.tipo == 'JUR' ? pageScreen.querySelector('#edtIncEst').value : ''
+            params.im = params.tipo == 'JUR' ? pageScreen.querySelector('#edtInscMun').value : ''
+            params.end = pageScreen.querySelector('#edtEnd').value.trim().toUpperCase()
+            params.num = pageScreen.querySelector('#edtNum').value.trim()
+            params.bairro = pageScreen.querySelector('#edtBairro').value.trim().toUpperCase()
+            params.cep = pageScreen.querySelector('#edtCEP').value
+            params.cidade = pageScreen.querySelector('#edtCidade').value.trim().toUpperCase()
+            params.uf = pageScreen.querySelector('#cmbEstado').value
+            params.tel = getNum(pageScreen.querySelector('#edtTel').value)
+            params.bco_nome = pageScreen.querySelector('#edtBanco').value.trim().toUpperCase()
+            params.bco_ag = getNum(pageScreen.querySelector('#edtAG').value)
+            params.bco_cc = getNum(pageScreen.querySelector('#edtCC').value)
+            params.bco_pix = pageScreen.querySelector('#edtPix').value.trim()
+            params.modal = pageScreen.querySelector('#cmbModal').value
+            params.whatsapp = whats ? params.tel : getNum(pageScreen.querySelector('#edtWhats').value)
+
+            const myPromisse = queryDB(params,'ADM-1');
+            myPromisse.then((resolve)=>{
+                main_data.adm_clientes.func.fillEmp()
+                setLog('Empresa ' +del ? 'Deletada ' : novoReg ? 'Cadastrada ':'Editada '+JSON.stringify(params))
+/**                
+                if(pageData.mode == 'vendedor'){
+                    if(pageData.callby =='compra'){
+                        main_data.compra.fillClientes()
+                    }else if(pageData.callby =='venda'){
+                        main_data.venda.fillClientes()
+                    }
+                }
+*/
+                closeModal('adm_view_cliente')
+            })
+        }
+    }
+
+    function juridica(JUR){
+
+        const edt = pageScreen.querySelector('#edtCNPJ')
+        edt.removeEventListener('keyup',valCNPJ(edt),1)
+        edt.removeEventListener('keyup',valCPF(edt),1)
+        edt.maxLength = JUR ? '18' : '14'
+        edt.addEventListener('keyup',()=>{ 
+            JUR ? valCNPJ(edt) : valCPF(edt)
+        })
+        edt.value =  JUR ? getCNPJ(edt.value) : getCPF(edt.value)
+
+        pageScreen.querySelector('#lblCNPJ').innerHTML = JUR ?  'CNPJ*' : 'CPF*'
+        const fields = pageScreen.querySelectorAll('.juridica')
+        for(let i=0; i<fields.length; i++){
+            fields[i].style.display = JUR ? 'block' : 'none'
+        }
+    }
+
+    pageScreen.querySelector('#cmbTipo').addEventListener('change',()=>{
+         juridica(pageScreen.querySelector('#cmbTipo').value == 'JUR')
+    })
+
+    pageScreen.querySelector('#ckbWhats').addEventListener('change',()=>{
+        pageScreen.querySelector('#edtWhats').disabled = !pageScreen.querySelector('#ckbWhats').checked
+    })
+    
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        openFields()
+        pageScreen.querySelector('#btnDel').disabled = 0
+        pageScreen.querySelector('#btnEdit').disabled = 1
+        pageScreen.querySelector('#btnCNPJ').disabled = 1
+    })
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        pageFunc.setEmp()
+    })
+
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if (confirm('Deseja realmente deletar este cliente?')) {
+            pageFunc.setEmp(1)
+        }
+    })
+
+    pageScreen.querySelector('#btnCNPJ').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#cmbTipo').value == 'JUR'){
+            window.open(`https://servicos.receita.fazenda.gov.br/servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=${getNum(document.querySelector('#edtCNPJ').value)}`,'_blank')
+        }
+    })
+
+
+
+    pageStart()
+
+
+</script>

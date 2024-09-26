@@ -1,0 +1,81 @@
+
+<template>
+    <style>
+        #btnRelat{
+            display: none;
+        }
+
+    </style>
+
+    <fieldset class="empresa">
+        <legend>Filtro</legend>
+
+        <div class="inline">
+            <label for="edtBusca">por:</label>
+            <select id="cmbBusca">
+                <option value="fantasia" signal="LIKE">Nome Fantasia</option>
+                <option value="nome" signal="LIKE" selected>Nome</option>
+                <option value="tipo" signal="=" val="'FIS'">Pessoa Física</option>
+                <option value="tipo" signal="=" val="'JUR'">Pessoa Jurídica</option>
+                <option value="modal" signal="=" val="'CLI'">Cliente</option>
+                <option value="modal" signal="=" val="'FORN'">Fornecedor</option>                    
+                <option value="cnpj_cpf" signal="LIKE" >CNPJ/CPF</option>
+                <option value="ie" signal="LIKE">Insc. Estadual</option>
+                <option value="id" signal="IN">Código</option>
+            </select>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round" >+</button>
+
+        </div>
+
+        <table id="tblEmp"></table>
+    </fieldset>
+
+</template>
+<script>
+  
+    const pageData = main_data.adm_clientes.data
+    const pageFunc = main_data.adm_clientes.func
+    const pageScreen = document.querySelector('#card-adm_clientes')
+
+    pageFunc.fillEmp = ()=>{
+        const query = getVal('empresa')
+        const tbl = document.getElementById('tblEmp')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]
+        const myPromisse = queryDB(params,'ADM-0')
+
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                const json = JSON.parse(resolve);
+                tbl.head('Cod.|mobHide,Nome Fantasia,CNPJ/CPF|mobHide,Telefone|mobHide,Tipo')            
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'id|mobHide,fantasia,cnpj_cpf|mobHide,tel|mobHide,tipo','int,Upp,str,str,str')
+                }                
+            }        
+        })
+    }
+
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillEmp()
+    })
+
+
+    pageScreen.querySelector('#tblEmp').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.mode = 'edit'
+        openHTML('adm_view_cliente.html','pop-up',data.id+"-"+data.nome,data)
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('adm_view_cliente.html','pop-up',"Nova Empresa")
+    })
+
+
+
+</script>

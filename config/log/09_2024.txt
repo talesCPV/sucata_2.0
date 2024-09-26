@@ -1,0 +1,41 @@
+02/09/2024 16:08 admin@planet3.com.br : Insercao de novo usuarios, email:undefined -> teste@teste.com.br, acesso:undefined -> 1
+02/09/2024 16:09 admin@planet3.com.br : Insercao de novo usuarios, email:undefined -> teste@teste.com.br, acesso:undefined -> 1
+02/09/2024 16:18 admin@planet3.com.br : Menu Incluido (Modulo 1)
+02/09/2024 16:18 admin@planet3.com.br : Menu Incluido (Item 1)
+02/09/2024 16:19 admin@planet3.com.br : Menu Incluido (Item 2)
+02/09/2024 16:19 admin@planet3.com.br : Menu Alterado (Modulo 1, menu, pop-up, )
+02/09/2024 16:20 admin@planet3.com.br : Menu Alterado (Item 1, menu, pop-up, )
+02/09/2024 16:21 admin@planet3.com.br : Menu Alterado (Item 2, menu, pop-up, )
+02/09/2024 16:21 admin@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0]])
+02/09/2024 16:21 admin@planet3.com.br : Permissao alterada, Modulo: Uteis, Acesso:[[0,1]])
+02/09/2024 16:21 admin@planet3.com.br : Permissao alterada, Modulo: Modulo 1, Acesso:[[0,1]])
+02/09/2024 16:21 admin@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0]])
+02/09/2024 16:21 admin@planet3.com.br : Permissao alterada, Modulo: Uteis, Acesso:[[0,1]])
+02/09/2024 16:21 admin@planet3.com.br : Permissao alterada, Modulo: Modulo 1, Acesso:[[0,1]])
+02/09/2024 16:39  : admin@planet3.com.br -> Senha alterada pelo usuario
+03/09/2024 16:19 admin@planet3.com.br : Menu Incluido (Modulo 2)
+03/09/2024 16:19 admin@planet3.com.br : Menu Incluido (Demonstracao)
+03/09/2024 16:20 admin@planet3.com.br : Menu Alterado (Modulo 2, menu, pop-up, )
+03/09/2024 16:20 admin@planet3.com.br : Menu Alterado (Demonstracao, demo.html, pop-up, Demonstracao)
+03/09/2024 16:20 admin@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0]])
+03/09/2024 16:20 admin@planet3.com.br : Permissao alterada, Modulo: Uteis, Acesso:[[0,1]])
+03/09/2024 16:20 admin@planet3.com.br : Permissao alterada, Modulo: Modulo 2, Acesso:[[0,1]])
+03/09/2024 16:20 admin@planet3.com.br : Permissao alterada, Modulo: Modulo 1, Acesso:[[0,1]])
+03/09/2024 16:52 admin@planet3.com.br : Menu Alterado (Demonstracao, demo.html, pop-up, Demonstracao da Janela)
+10/09/2024 14:15 admin@planet3.com.br : admin@planet3.com.br -> Senha alterada pelo usuario
+10/09/2024 14:21 admin@planet3.com.br : Alteracao de usuario, email:visitante@planet3.com.br -> visitante@planet3.com.br, acesso:1 -> 1
+10/09/2024 14:32 admin@planet3.com.br : Insercao de novo usuarios, email:undefined -> teste@planet3.com.br, acesso:undefined -> 1
+10/09/2024 14:33 admin@planet3.com.br : Alteracao de usuario, email:teste@planet3.com.br -> teste@planet3.com.br, acesso:1 -> 1
+25/09/2024 21:32 tales@planet3.com.br : Menu Deletado (RAIZera)
+25/09/2024 21:33 tales@planet3.com.br : Menu Incluido (Cadastros)
+25/09/2024 21:34 tales@planet3.com.br : Menu Incluido (Empresas)
+25/09/2024 21:34 tales@planet3.com.br : Menu Alterado (Cadastros, menu, pop-up, )
+25/09/2024 21:34 tales@planet3.com.br : Menu Alterado (Empresas, menu, pop-up, Empresas)
+25/09/2024 21:43 tales@planet3.com.br : Menu Alterado (Empresas, adm_clientes.html, pop-up, Empresas)
+26/09/2024 19:51 tales@planet3.com.br : teste
+26/09/2024 20:17 tales@planet3.com.br : Deletada 
+26/09/2024 20:17 tales@planet3.com.br : Deletada 
+26/09/2024 20:22 tales@planet3.com.br : Deletada 
+26/09/2024 20:23 tales@planet3.com.br : Deletada 
+26/09/2024 20:23 tales@planet3.com.br : Deletada 
+26/09/2024 20:23 tales@planet3.com.br : Deletada 
