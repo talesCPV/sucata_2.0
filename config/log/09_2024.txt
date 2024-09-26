@@ -45,3 +45,6 @@
 26/09/2024 20:54 tales@planet3.com.br : Empresa Cadastrada  {"id":0,"nome":"TT","fantasia":"TT","tipo":"JUR","cnpj":"11.22","ie":"","im":"","end":"11222","num":"","bairro":"","cep":"","cidade":"","uf":"SP","tel":"","bco_nome":"","bco_ag":"","bco_cc":"","bco_pix":"12121212","modal":"BOTH","whatsapp":""}
 26/09/2024 20:55 tales@planet3.com.br : Empresa Editada  {"id":"195","nome":"TT","fantasia":"TT","tipo":"JUR","cnpj":"11.223.332/2233-33","ie":"","im":"","end":"112223","num":"","bairro":"","cep":"","cidade":"","uf":"SP","tel":"","bco_nome":"","bco_ag":"","bco_cc":"","bco_pix":"12121212","modal":"BOTH","whatsapp":""}
 26/09/2024 20:55 tales@planet3.com.br : Empresa Deletada  {"id":"195","nome":"","fantasia":"TT","tipo":"JUR","cnpj":"11.223.332/2233-33","ie":"","im":"","end":"112223","num":"","bairro":"","cep":"","cidade":"","uf":"SP","tel":"","bco_nome":"","bco_ag":"","bco_cc":"","bco_pix":"12121212","modal":"BOTH","whatsapp":""}
+26/09/2024 21:01 tales@planet3.com.br : Menu Incluido (Compradores)
+26/09/2024 21:02 tales@planet3.com.br : Menu Alterado (Comprador, adm.compradores.html, pop-up, Compradores)
+26/09/2024 21:02 tales@planet3.com.br : Menu Alterado (Comprador, adm_compradores.html, pop-up, Compradores)

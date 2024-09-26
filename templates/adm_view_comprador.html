@@ -1,0 +1,126 @@
+<template>
+    <style>
+
+        .frm{
+            display: flex;
+            flex-direction: column;
+        }
+     
+    </style>
+  
+    <fieldset class="frm">
+        <legend>Motoristas</legend>
+        <div class="inline">
+            <label for="edtNome">Nome:*</label>
+            <input type="text" id="edtNome" class="only-view" placeholder="Nome" maxlength="40" disabled>
+        </div>
+        <div class="inline">
+            <label for="edtCPF">CPF</label>
+            <input type="text" id="edtCPF" class="only-view" placeholder="CPF" maxlength="14" onkeyup="return valCPF(this)" disabled>
+            <label for="edtRG">RG</label>
+            <input type="text" id="edtRG" class="only-view" placeholder="RG" maxlength="12" onkeyup="return valRG(this)" disabled>
+            <div class="line-ckb">
+                <label for="ckbLimite">Limite de Compra</label>
+                <input type="checkbox" id="ckbLimite" checked>
+            </div>
+        </div>
+        <div class="inline">
+            <label for="edtCNH">CNH</label>
+            <input type="text" id="edtCNH" placeholder="CNH" maxlength="12" onkeyup="return valInt(this)">
+            <label for="edtTipo">Tipo</label>
+            <input type="text" id="edtTipo" placeholder="ex: A, AB, D, E" maxlength="2">
+            <label for="edtVal">Validade</label>
+            <input type="date" id="edtVal"  >
+        </div>
+        <div class="inline">
+            <label for="cmbUser">Usuário</label>
+            <select id="cmbUser"></select>
+            <label for="cmbLocal">Veículo</label>
+            <select id="cmbLocal"></select>
+        
+        </div>
+
+        <div class="line">  
+            <button id="btnDel" class="only-view" disabled>Deletar</button>
+            <button id="btnEdit">Editar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>            
+        </div>
+    </fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.adm_view_comprador.data
+    const pageFunc = main_data.adm_view_comprador.func
+    const pageScreen = document.querySelector('#card-adm_view_comprador')
+    const newComp = Object.keys(pageData).length == 0
+
+    function pageStart(){
+        const params = new Object;
+            params.hash = localStorage.getItem('hash')
+            params.field = 'local'
+            params.signal = '='
+            params.value = '"MOVEL"'        
+
+        fillCombo('cmbUser',params,26,['id','nome'], main_data.viewMotorista.data.mode == 'edit' ? main_data.viewMotorista.data.id_usuario :'' )
+        fillCombo('cmbLocal',params,20,['id','modelo'], main_data.viewMotorista.data.mode == 'edit' ? main_data.viewMotorista.data.id_local :'' )
+
+
+        if(main_data.viewMotorista.data.mode == 'edit'){
+            pageScreen.querySelector('#edtNome').value = main_data.viewMotorista.data.nome
+            pageScreen.querySelector('#edtCPF').value = main_data.viewMotorista.data.cpf
+            pageScreen.querySelector('#edtRG').value = main_data.viewMotorista.data.rg
+            pageScreen.querySelector('#edtCNH').value = main_data.viewMotorista.data.cnh
+            pageScreen.querySelector('#edtTipo').value = main_data.viewMotorista.data.tipo
+            pageScreen.querySelector('#edtVal').value = main_data.viewMotorista.data.validade
+            pageScreen.querySelector('#ckbLimite').checked = parseInt(main_data.viewMotorista.data.limite)
+        }else{
+            pageScreen.querySelector('#btnDel').style.display = 'none'
+        }
+    }
+
+
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        if(checkField(['edtNome']) ){
+
+            const params = new Object;
+                params.id = main_data.viewMotorista.data.mode == 'new' ? 'DEFAULT' : main_data.viewMotorista.data.id
+                params.nome = pageScreen.querySelector('#edtNome').value.trim().toUpperCase()
+                params.cpf = pageScreen.querySelector('#edtCPF').value
+                params.rg = pageScreen.querySelector('#edtRG').value
+                params.cnh = pageScreen.querySelector('#edtCNH').value
+                params.tipo = pageScreen.querySelector('#edtTipo').value.trim().toUpperCase()
+                params.validade = pageScreen.querySelector('#edtVal').value
+                params.id_usuario = pageScreen.querySelector('#cmbUser').value
+                params.id_local = pageScreen.querySelector('#cmbLocal').value
+                params.limite = pageScreen.querySelector('#ckbLimite').checked
+
+            const myPromisse = queryDB(params,21);
+
+            myPromisse.then((resolve)=>{
+                main_data.motoristas.fillMotor()
+                closeModal('viewMotorista')
+            })
+        }        
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+
+        if (confirm('Deseja realmente deletar este Motorista?')) {
+            const params = new Object;
+                params.id = main_data.viewMotorista.data.id
+                params.hash = localStorage.getItem('hash')
+
+            const myPromisse = queryDB(params,22);
+            myPromisse.then((resolve)=>{
+                main_data.motoristas.fillMotor()
+                closeModal('viewMotorista')                
+            })
+        }
+    })
+
+
+    pageStart()
+
+</script>

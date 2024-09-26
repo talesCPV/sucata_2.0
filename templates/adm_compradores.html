@@ -1,0 +1,75 @@
+
+<template>
+    <style></style>
+  
+  <fieldset class="comprador">
+    <legend>Filtro</legend>
+
+    <div class="inline">
+        <label for="edtBusca">por:</label>
+        <select id="cmbBusca">
+            <option value="nome" signal="LIKE" selected>Nome</option>
+            <option value="modelo" signal="LIKE">Veículo</option>                    
+            <option value="cpf" signal="LIKE">CPF</option>
+            <option value="rg" signal="LIKE">RG</option>
+            <option value="cnh" signal="LIKE">CNG</option>
+        </select>
+        <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+        <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+        <button id="btnNovo" class="btn-round" >+</button>
+
+    </div>
+
+    <table id="tblMotor"></table>
+</fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.adm_compradores.data
+    const pageFunc = main_data.adm_compradores.func
+    const pageScreen = document.querySelector('#card-adm_compradores')
+
+    function startPage(){
+        pageFunc.fillComprador()
+
+    }
+
+   pageFunc.fillComprador =  ()=>{
+        const query = getVal('comprador')
+        const tbl = document.getElementById('tblMotor')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]
+
+        const myPromisse = queryDB(params,'ADM-2');
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                const json = JSON.parse(resolve);
+                tbl.head('Nome,CPF,Veículo')
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'nome,cpf,modelo')
+                }                
+            } 
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillComprador()
+    })
+
+    pageScreen.querySelector('#tblMotor').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.callback = 'main_data.adm_compradores.func.fillComprador()'
+        openHTML('adm_view_comprador.html','pop-up','Editar Dados do Comprador',data)
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('adm_view_comprador.html','pop-up','Novo Comprador')
+    })
+
+
+
+</script>
