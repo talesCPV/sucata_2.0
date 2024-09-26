@@ -68,7 +68,7 @@
 
     pageScreen.querySelector('#tblEmp').addEventListener('click',(e)=>{
         data = e.target.parentNode.data
-        data.mode = 'edit'
+        data.callback = 'main_data.adm_clientes.func.fillEmp()'
         openHTML('adm_view_cliente.html','pop-up',data.id+"-"+data.nome,data)
     })
 

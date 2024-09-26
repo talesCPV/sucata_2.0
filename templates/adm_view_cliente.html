@@ -198,17 +198,10 @@
 
             const myPromisse = queryDB(params,'ADM-1');
             myPromisse.then((resolve)=>{
-                main_data.adm_clientes.func.fillEmp()
-                setLog('Empresa ' +del ? 'Deletada ' : novoReg ? 'Cadastrada ':'Editada '+JSON.stringify(params))
-/**                
-                if(pageData.mode == 'vendedor'){
-                    if(pageData.callby =='compra'){
-                        main_data.compra.fillClientes()
-                    }else if(pageData.callby =='venda'){
-                        main_data.venda.fillClientes()
-                    }
+               if(pageData.hasOwnProperty('callback')){
+                    eval(pageData.callback)
                 }
-*/
+                setLog(`Empresa ${del ? 'Deletada ': novoReg ? 'Cadastrada ':'Editada '} ${JSON.stringify(params)}`)
                 closeModal('adm_view_cliente')
             })
         }
