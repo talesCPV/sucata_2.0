@@ -1,0 +1,72 @@
+
+<template>
+    <style>
+        button{
+            width: 98%;
+        }
+
+        #scroll{
+            max-height: 70%;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+    </style>
+  
+    <div class="form-base">
+        <h1>Estoques</h1>
+        <fieldset>
+            <legend>Locais</legend>
+            <div id="scroll">
+                <table id="tblLocal"></table>
+            </div>
+            <button id="btnLocal">Novo</button>
+        </fieldset>          
+         
+    </div>
+
+</template>
+<script>
+
+    main_data.local.fillLocal =  function (){
+        const tbl = document.getElementById('tblLocal')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.hash = localStorage.getItem('hash');
+            params.field = 'id'
+            params.signal = '>='
+            params.value = '0'
+        const myPromisse = queryDB(params,20);
+
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                const json = JSON.parse(resolve);
+                tbl.head('Descrição,Tipo')
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'modelo,local')
+                }                
+            } 
+        })
+    }
+
+
+
+
+    main_data.local.fillLocal()
+
+    document.querySelector('#tblLocal').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.mode = 'edit'
+        openHTML('viewLocal.html','pop-up','Editar Local de Estoque',data)
+    })
+
+    document.querySelector('#btnLocal').addEventListener('click',()=>{
+        const data = new Object
+        data.mode = 'new'
+        openHTML('viewLocal_detal.html','pop-up','Novo Local de Estoque',data)
+
+    })
+
+
+
+</script>

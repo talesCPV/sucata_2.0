@@ -387,3 +387,59 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_comprador;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_comprador(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid int(11),
+		IN Iid_usuario int(11),
+		IN Iid_local int(11),
+		IN Inome varchar(40),
+		IN Icpf varchar(14),
+		IN Irg varchar(12),
+		IN Icnh varchar(12),
+		IN Itipo varchar(2),
+		IN Ivalidade date,
+		IN Ilimite tinyint(1)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome="")THEN
+				DELETE FROM tb_motorista WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_motorista (id_usuario,id_local,nome,cpf,rg,cnh,tipo,validade,limite) 
+					VALUES (Iid_usuario,Iid_local,Inome,Icpf,Irg,Icnh,Itipo,Ivalidade,Ilimite);
+                ELSE
+					UPDATE tb_motorista 
+                    SET id_usuario=Iid_usuario,id_local=Iid_local,nome=Inome,cpf=Icpf,rg=Irg,cnh=Icnh,tipo=Itipo,validade=Ivalidade,limite=Ilimite
+					WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+/* LOCAL DE ESTOQUE */
+
+ DROP PROCEDURE IF EXISTS sp_view_local_estq;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_local_estq(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ifield varchar(30),
+        IN Isignal varchar(4),
+		IN Ivalue varchar(50)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @quer =CONCAT('SELECT * FROM tb_local WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			PREPARE stmt1 FROM @quer;
+			EXECUTE stmt1;
+        END IF;
+	END $$
+DELIMITER ;

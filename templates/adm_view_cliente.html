@@ -139,7 +139,6 @@
         pageScreen.querySelector('#btnCNPJ').disabled = novoReg || (pageData.tipo != 'JUR')
         openFields(novoReg)
         if (!novoReg){
-
             pageScreen.querySelector('#edtNome').value = pageData.nome.toUpperCase()
             pageScreen.querySelector('#cmbTipo').value =  pageData.tipo                        
             pageScreen.querySelector('#edtCNPJ').value = pageData.cnpj_cpf

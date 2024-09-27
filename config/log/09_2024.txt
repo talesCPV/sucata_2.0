@@ -48,3 +48,7 @@
 26/09/2024 21:01 tales@planet3.com.br : Menu Incluido (Compradores)
 26/09/2024 21:02 tales@planet3.com.br : Menu Alterado (Comprador, adm.compradores.html, pop-up, Compradores)
 26/09/2024 21:02 tales@planet3.com.br : Menu Alterado (Comprador, adm_compradores.html, pop-up, Compradores)
+27/09/2024 20:40 tales@planet3.com.br : Comprador Cadastrado  {"id":0,"id_usuario":"8","id_local":"6","nome":"TALES","cpf":"266.872.008-79","rg":"27.918.135-8","cnh":"123456789","tipo":"B","validade":"2028-04-12","limite":true}
+27/09/2024 20:40 tales@planet3.com.br : Comprador Editado  {"id":"7","id_usuario":"8","id_local":"6","nome":"TALES C. DANTAS","cpf":"266.872.008-79","rg":"27.918.135-8","cnh":"123456789","tipo":"B","validade":"2028-04-12","limite":true}
+27/09/2024 20:41 tales@planet3.com.br : Comprador Editado  {"id":"7","id_usuario":"8","id_local":"6","nome":"TALES C. DANTAS","cpf":"266.872","rg":"27.918.135-8","cnh":"123456789","tipo":"B","validade":"2028-04-12","limite":true}
+27/09/2024 20:41 tales@planet3.com.br : Comprador Deletado  {"id":"7","id_usuario":"8","id_local":"6","nome":"","cpf":"266.872","rg":"27.918.135-8","cnh":"123456789","tipo":"B","validade":"2028-04-12","limite":true}
