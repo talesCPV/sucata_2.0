@@ -1,0 +1,106 @@
+<template>
+    <style></style>
+  
+    <fieldset class="frm">
+        <legend>Tipo de Material</legend>
+        <div class="inline">
+            <label for="edtNome">Nome:*</label>
+            <input type="text" id="edtNome" class="only-view" placeholder="Nome" maxlength="20" disabled>
+            <label for="edtCod">Código:</label>
+            <input type="text" id="edtCod" class="only-view" maxlength="20" style="max-width: 300px;" disabled>
+        </div>
+        <div class="inline">
+            <label for="edtNCM">NCM:</label>
+            <input type="text" id="edtNCM" class="only-view" maxlength="8" onkeyup="valInt(this)" disabled>
+            <label for="cmbUnd">Und:</label>
+            <select id="cmbUnd" class="only-view" disabled></select>
+        </div>
+        <div class="line">
+            <button id="btnEdit" disabled><span class="mdi mdi-note-edit"></span>Editar</button>
+            <button id="btnDel" disabled><span class="mdi mdi-delete"></span>Deletar</button>
+            <button id="btnSave" class="only-view" disabled><span class="mdi mdi-content-save"></span>Salvar</button>
+        </div>
+
+    </fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.conf_view_material.data
+    const pageFunc = main_data.conf_view_material.func
+    const pageScreen = document.querySelector('#card-conf_view_material')
+    const novoReg = !(Object.keys(pageData).length)
+
+    function pageStart(){
+        pageScreen.querySelector('#btnEdit').disabled = novoReg
+        openFields(novoReg)
+        fillUnd()
+        if (!novoReg){
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtCod').value =  pageData.cod
+            pageScreen.querySelector('#edtNCM').value =  pageData.ncm
+        }else{
+            pageScreen.querySelector('#edtNome').focus()
+        }
+    }
+
+    function fillUnd(){
+        const params = new Object;
+            params.field = 'nome'
+            params.signal = 'LIKE'
+            params.value = "'%%'"
+        const myPromisse = queryDB(params,'CONF-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const combo = pageScreen.querySelector('#cmbUnd')
+            combo.innerHTML = ''
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].nome
+                opt.value = json[i].sigla
+                opt.selected = json[i].sigla == pageData.und ? 1 : 0
+                combo.appendChild(opt)
+            }         
+        })
+    }
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        openFields()
+        pageScreen.querySelector('#btnDel').disabled = 0
+        pageScreen.querySelector('#btnEdit').disabled = 1
+    })
+
+    pageFunc.setMat = (del=0)=>{
+        const params = new Object;
+            params.id = novoReg ? 0 : pageData.id
+            params.nome = del ? '' : pageScreen.querySelector('#edtNome').value.trim().toUpperCase()
+            params.cod = pageScreen.querySelector('#edtCod').value.trim() == '' ? params.nome : pageScreen.querySelector('#edtCod').value.trim()
+            params.ncm = pageScreen.querySelector('#edtNCM').value.trim()
+            params.und = pageScreen.querySelector('#cmbUnd').value
+
+        const myPromisse = queryDB(params,'CONF-3');
+
+        myPromisse.then((resolve)=>{
+            if(pageData.hasOwnProperty('callback')){
+                eval(pageData.callback)
+            }
+            setLog(`Material ${del ? 'Deletado ': novoReg ? 'Cadastrado ':'Editado '} ${JSON.stringify(params)}`)
+            closeModal('conf_view_material')
+        })
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        if(checkField(['edtNome']) ){
+            pageFunc.setMat()
+        }        
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if (confirm('Deseja realmente deletar este material?')) {
+            pageFunc.setMat(1)
+        }
+    })
+
+    pageStart()
+
+</script>

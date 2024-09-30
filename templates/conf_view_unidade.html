@@ -1,12 +1,5 @@
 <template>
-    <style>
-
-        .frm{
-            display: flex;
-            flex-direction: column;
-        }
-     
-    </style>
+    <style></style>
   
     <fieldset class="frm">
         <legend>Unidades</legend>
@@ -68,14 +61,13 @@
         pageScreen.querySelector('#btnEdit').disabled = 1
     })
 
-    document.querySelector('#btnSave').addEventListener('click',()=>{
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         if(checkField(['edtNome','edtSigla']) ){
             pageFunc.setUnd()
         }        
     })
 
-    document.querySelector('#btnDel').addEventListener('click',()=>{
-
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
         if (confirm('Deseja realmente deletar esta unidade?')) {
             pageFunc.setUnd(1)
         }

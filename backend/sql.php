@@ -35,6 +35,9 @@
         /* CONFIGURAÇÕES */
         "CONF-0" => 'CALL sp_view_unidades(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
         "CONF-1" => 'CALL sp_set_unidade(@access,@hash,x00,"x01","x02");', // ID,NOME,SIGLA
+        "CONF-2" => 'CALL sp_view_materiais(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
+        "CONF-3" => 'CALL sp_set_material(@access,@hash,x00,"x01","x02","x03","x04");', // ID,NOME,COD,NCM,UND
+
 
     );
 

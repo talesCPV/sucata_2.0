@@ -492,3 +492,54 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+/* MATERIAIS */
+
+ DROP PROCEDURE IF EXISTS sp_view_materiais;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_materiais(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ifield varchar(30),
+        IN Isignal varchar(4),
+		IN Ivalue varchar(50)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @quer =CONCAT('SELECT * FROM tb_material WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			PREPARE stmt1 FROM @quer;
+			EXECUTE stmt1;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_material;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_material(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid int(11),
+		IN Inome varchar(20),
+		IN Icod varchar(20),
+		IN Incm varchar(8),
+		IN Iund varchar(10)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome="")THEN
+				DELETE FROM tb_material WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_material (nome,cod,ncm,und) 
+					VALUES (Inome,Icod,Incm,Iund);
+                ELSE
+					UPDATE tb_material 
+                    SET nome=Inome,cod=Icod,ncm=Incm,und=Iund
+					WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

@@ -1,0 +1,73 @@
+
+<template>
+    <style></style>
+  
+        <fieldset class="materiais">
+            <legend>Filtro</legend>
+
+            <div class="inline">
+                <label for="edtBusca">por:</label>
+                <select id="cmbBusca">
+                    <option value="nome" signal="LIKE" selected>Nome</option>                  
+                    <option value="ncm" signal="LIKE" >NCM</option>
+                </select>
+                <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+                <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+                <button id="btnNovo" class="btn-round" >+</button>
+            </div>
+            <table id="tblMat"></table>
+        </fieldset>         
+    </div>
+
+</template>
+<script>
+
+
+    const pageData = main_data.conf_materiais.data
+    const pageFunc = main_data.conf_materiais.func
+    const pageScreen = document.querySelector('#card-conf_materiais')
+
+    function pageStart(){
+        pageFunc.fillMat()
+    }
+
+
+    pageFunc.fillMat = ()=>{
+        const query = getVal('materiais')
+        const tbl = document.getElementById('tblMat')
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]        
+
+        const myPromisse = queryDB(params,'CONF-2')
+
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                const json = JSON.parse(resolve)
+                tbl.head('Nome,NCM, Und')
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'nome,ncm,und')
+                }                
+            } 
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillMat()
+    })
+
+    pageScreen.querySelector('#tblMat').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.callback = 'main_data.conf_materiais.func.fillMat()'
+        openHTML('conf_view_material.html','pop-up','Editar Tipo de Material',data)
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('conf_view_material.html','pop-up','Novo Tipo de Material')
+
+    })
+
+    pageStart()
+
+</script>

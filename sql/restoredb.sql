@@ -86,3 +86,8 @@
     
     SELECT * FROM tb_und;
     INSERT INTO tb_und VALUES (1,'Quilo','KG'),(2,'Unidade','UND');
+    
+    /* MATERIAIS */
+    
+    SELECT * FROM tb_material;
+    INSERT INTO tb_material VALUES (1,'ALUMÍNIO','ALUMÍNIO','12345678','KG'),(2,'METAL','METAL','98765434','KG'),(3,'COBRE','COBRE','111','KG');

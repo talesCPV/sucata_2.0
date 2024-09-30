@@ -1,18 +1,6 @@
 
 <template>
-    <style>
-        button{
-            width: 98%;
-        }
-
-        #scroll{
-            max-height: 200px;
-            overflow: hidden;
-            overflow-y: scroll;
-        }
-
-    </style>
-  
+    <style></style>
 
         <fieldset class="unidades">
             <legend>Filtro</legend>
@@ -47,7 +35,6 @@
 
         const query = getVal('unidades')
         const tbl = document.getElementById('tblUnd')
-        tbl.innerHTML = ''
         const params = new Object;
             params.field = query[0]
             params.signal = query[1]
@@ -56,7 +43,7 @@
         const myPromisse = queryDB(params,'CONF-0');
 
         myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve);
+            const json = JSON.parse(resolve)
             tbl.head('Nome,Sigla')
             for(let i=0; i<json.length;i++){
                 tbl.plot(json[i],'nome,sigla')
