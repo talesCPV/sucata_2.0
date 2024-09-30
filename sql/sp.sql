@@ -443,3 +443,52 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+/* UNIDADES */
+
+ DROP PROCEDURE IF EXISTS sp_view_unidades;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_unidades(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ifield varchar(30),
+        IN Isignal varchar(4),
+		IN Ivalue varchar(50)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @quer =CONCAT('SELECT * FROM tb_und WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			PREPARE stmt1 FROM @quer;
+			EXECUTE stmt1;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_unidade;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_unidade(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid int(11),
+		IN Inome varchar(20),
+		IN Isigla varchar(10)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome="")THEN
+				DELETE FROM tb_und WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_und (nome,sigla) 
+					VALUES (Inome,Isigla);
+                ELSE
+					UPDATE tb_und 
+                    SET nome=Inome,sigla=Isigla
+					WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

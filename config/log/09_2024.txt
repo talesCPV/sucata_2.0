@@ -52,3 +52,15 @@
 27/09/2024 20:40 tales@planet3.com.br : Comprador Editado  {"id":"7","id_usuario":"8","id_local":"6","nome":"TALES C. DANTAS","cpf":"266.872.008-79","rg":"27.918.135-8","cnh":"123456789","tipo":"B","validade":"2028-04-12","limite":true}
 27/09/2024 20:41 tales@planet3.com.br : Comprador Editado  {"id":"7","id_usuario":"8","id_local":"6","nome":"TALES C. DANTAS","cpf":"266.872","rg":"27.918.135-8","cnh":"123456789","tipo":"B","validade":"2028-04-12","limite":true}
 27/09/2024 20:41 tales@planet3.com.br : Comprador Deletado  {"id":"7","id_usuario":"8","id_local":"6","nome":"","cpf":"266.872","rg":"27.918.135-8","cnh":"123456789","tipo":"B","validade":"2028-04-12","limite":true}
+30/09/2024 14:52 tales@planet3.com.br : Menu Incluido (Configuracoes)
+30/09/2024 14:52 tales@planet3.com.br : Menu Incluido (Unidades)
+30/09/2024 14:53 tales@planet3.com.br : Menu Alterado (Configuracoes, menu, pop-up, )
+30/09/2024 14:57 tales@planet3.com.br : Menu Alterado (Unidades, conf_unidade.html, pop-up, Unidades)
+30/09/2024 14:58 tales@planet3.com.br : Menu Incluido (Material)
+30/09/2024 14:59 tales@planet3.com.br : Menu Alterado (Material, conf_material.html, pop-up, Materiais)
+30/09/2024 15:16 tales@planet3.com.br : Menu Alterado (Unidades, conf_unidades.html, pop-up, Unidades)
+30/09/2024 15:16 tales@planet3.com.br : Menu Alterado (Unidades, conf_unidades.html, pop-up, Unidades)
+30/09/2024 15:17 tales@planet3.com.br : Menu Alterado (Unidades, conf_unidades.html, pop-up, Unidades)
+30/09/2024 15:37 tales@planet3.com.br : Unidade Cadastrada  {"id":0,"nome":"teste","sigla":"TT"}
+30/09/2024 15:37 tales@planet3.com.br : Unidade Editada  {"id":"3","nome":"teste 25","sigla":"TT4"}
+30/09/2024 15:37 tales@planet3.com.br : Unidade Deletada  {"id":"3","nome":"","sigla":"TT4"}

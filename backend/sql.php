@@ -31,6 +31,11 @@
         "ADM-2"  => 'CALL sp_view_comprador(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
         "ADM-3"  => 'CALL sp_set_comprador(@access,@hash,"x00","x01","x02","x03","x04","x05","x06","x07","x08","x09");', // idid_usuario,id_local,nome,cpf,rg,cnh,tipo,validade,limite
         "ADM-4"  => 'CALL sp_view_local_estq(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
+
+        /* CONFIGURAÇÕES */
+        "CONF-0" => 'CALL sp_view_unidades(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
+        "CONF-1" => 'CALL sp_set_unidade(@access,@hash,x00,"x01","x02");', // ID,NOME,SIGLA
+
     );
 
 ?>

@@ -1,0 +1,86 @@
+<template>
+    <style>
+
+        .frm{
+            display: flex;
+            flex-direction: column;
+        }
+     
+    </style>
+  
+    <fieldset class="frm">
+        <legend>Unidades</legend>
+        <div class="inline">
+            <label for="edtNome">Nome:*</label>
+            <input type="text" id="edtNome" class="only-view" placeholder="Nome" maxlength="20" disabled>
+        </div>
+        <div class="inline">
+            <label for="edtSigla">Sigla:*</label>
+            <input type="text" id="edtSigla" class="only-view" placeholder="Sigla" maxlength="5" disabled>
+        </div>
+        <div class="line">
+            <button id="btnEdit" disabled><span class="mdi mdi-note-edit"></span>Editar</button>
+            <button id="btnDel" disabled><span class="mdi mdi-delete"></span>Deletar</button>
+            <button id="btnSave" class="only-view" disabled><span class="mdi mdi-content-save"></span>Salvar</button>
+        </div>
+
+    </fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.conf_view_unidade.data
+    const pageFunc = main_data.conf_view_unidade.func
+    const pageScreen = document.querySelector('#card-conf_view_unidade')
+    const novoReg = !(Object.keys(pageData).length)
+
+    function pageStart(){
+        pageScreen.querySelector('#btnEdit').disabled = novoReg
+        openFields(novoReg)
+        if (!novoReg){
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtSigla').value =  pageData.sigla.toUpperCase()
+        }else{
+            pageScreen.querySelector('#edtNome').focus()
+        }
+    }
+
+    pageFunc.setUnd = (del=0)=>{
+        const params = new Object;
+            params.id = novoReg ? 0 : pageData.id
+            params.nome = del ? '' : document.querySelector('#edtNome').value.trim()
+            params.sigla = document.querySelector('#edtSigla').value.trim().toUpperCase()
+
+        const myPromisse = queryDB(params,'CONF-1');
+
+        myPromisse.then((resolve)=>{
+            if(pageData.hasOwnProperty('callback')){
+                eval(pageData.callback)
+            }
+            setLog(`Unidade ${del ? 'Deletada ': novoReg ? 'Cadastrada ':'Editada '} ${JSON.stringify(params)}`)
+            closeModal('conf_view_unidade')
+        })
+    }
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        openFields()
+        pageScreen.querySelector('#btnDel').disabled = 0
+        pageScreen.querySelector('#btnEdit').disabled = 1
+    })
+
+    document.querySelector('#btnSave').addEventListener('click',()=>{
+        if(checkField(['edtNome','edtSigla']) ){
+            pageFunc.setUnd()
+        }        
+    })
+
+    document.querySelector('#btnDel').addEventListener('click',()=>{
+
+        if (confirm('Deseja realmente deletar esta unidade?')) {
+            pageFunc.setUnd(1)
+        }
+    })
+
+    pageStart()
+
+</script>

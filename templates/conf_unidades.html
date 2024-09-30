@@ -1,0 +1,83 @@
+
+<template>
+    <style>
+        button{
+            width: 98%;
+        }
+
+        #scroll{
+            max-height: 200px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+    </style>
+  
+
+        <fieldset class="unidades">
+            <legend>Filtro</legend>
+
+            <div class="inline">
+                <label for="edtBusca">por:</label>
+                <select id="cmbBusca">
+                    <option value="nome" signal="LIKE" selected>Nome</option>                  
+                    <option value="sigla" signal="LIKE" >Sigla</option>
+                </select>
+                <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+                <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+                <button id="btnNovo" class="btn-round" >+</button>
+            </div>
+
+            <table id="tblUnd"></table>
+        </fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.conf_unidades.data
+    const pageFunc = main_data.conf_unidades.func
+    const pageScreen = document.querySelector('#card-conf_unidades')
+
+
+    function pageStart(){
+        pageFunc.fillUnd()    
+    }
+
+    pageFunc.fillUnd = ()=>{
+
+        const query = getVal('unidades')
+        const tbl = document.getElementById('tblUnd')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]        
+
+        const myPromisse = queryDB(params,'CONF-0');
+
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve);
+            tbl.head('Nome,Sigla')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'nome,sigla')
+            }                
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillUnd()
+    })
+
+    pageScreen.querySelector('#tblUnd').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.callback = 'main_data.conf_unidades.func.fillUnd()'
+        openHTML('conf_view_unidade.html','pop-up','Editar Unidades',data,600)
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('conf_view_unidade.html','pop-up','Nova Unidade',{},600)
+    })
+
+    pageStart()
+
+</script>

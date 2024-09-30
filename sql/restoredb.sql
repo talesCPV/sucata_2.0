@@ -1,3 +1,14 @@
+/* USUARIO */
+		
+	SELECT * FROM tb_usuario;
+
+	INSERT INTO tb_usuario VALUES (9,'sassu','$~N~3Z69*~<x6r0l*f$`?Z9T3N-H\'B','Sassuardo','CALDEIRAO','1'),
+	(2,'PAULINHO','bdfhJLNPRTVXZ¨^`bdfhjlnprtvxz|','PAULO DA SILVA','CALDEIRAO','1'),
+    (5,'adriano','(X<*(z-+;*:JZjz-=,<L¨l|/?.>N^n','Adriano','CALDEIRAO','1'),
+    (6,'bruno','tTPT63$#/Tn+$>Xr/(B¨v3,F`z70Jd','Bruno','CALDEIRAO','2'),
+    (7,'DEDE','^(L+zbr>+TAj6#L9b.xD1Z&p<)R?h4','LUIZ PAULO DE OLIVEIRA','CALDEIRAO','1'),
+    (8,'tales','i--No3<<]~!Bc\'\'Hi--No33Tu99Z{?','Tales C. Dantas','CALDEIRAO','2');
+
 /* CLIENTES */
 
 	SELECT * FROM tb_clientes;
@@ -70,3 +81,8 @@
 
 	SELECT * from tb_local;
 	INSERT INTO tb_local VALUES (12,'2017','CAMINHAO BRANCO','GJN-8H65','CAMINHÃO',0,'MOVEL'),(3,'','GALPÃO DA V. PARAISO','','',0,'FIXO'),(6,'2012','CAMINHAO AMARELO','KLP-0D41','CAMINHÃO',0,'MOVEL'),(7,'','MONTANA','','UTILITARIO',0,'MOVEL'),(9,'','DIRETO ENTREGAS L.V.','','',0,'FIXO');
+    
+    /* UNIDADES */
+    
+    SELECT * FROM tb_und;
+    INSERT INTO tb_und VALUES (1,'Quilo','KG'),(2,'Unidade','UND');
