@@ -444,6 +444,38 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
+ DROP PROCEDURE IF EXISTS sp_set_local_estq;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_local_estq(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid int(11),
+		IN Iano varchar(4),
+		IN Imodelo varchar(20),
+		IN Iplaca varchar(8),
+		IN Itipo varchar(10),
+		IN Itara double,
+		IN Ilocal varchar(5)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Imodelo="")THEN
+				DELETE FROM tb_local WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_local (ano,modelo,placa,tipo,tara,local) 
+					VALUES (Iano,Imodelo,Iplaca,Itipo,Itara,Ilocal);
+                ELSE
+					UPDATE tb_local 
+                    SET ano=Iano,modelo=Imodelo,placa=Iplaca,tipo=Itipo,tara=Itara,local=Ilocal
+					WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
 /* UNIDADES */
 
  DROP PROCEDURE IF EXISTS sp_view_unidades;
@@ -540,6 +572,23 @@ DELIMITER $$
 					WHERE id=Iid;
                 END IF;
             END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+/* ESTOQUE */
+
+ DROP PROCEDURE IF EXISTS sp_view_estoque;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_estoque(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_local int(11)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM vw_item_estq WHERE id_local = Iid_local;
         END IF;
 	END $$
 DELIMITER ;

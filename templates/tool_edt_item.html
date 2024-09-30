@@ -1,0 +1,86 @@
+
+<template>
+    <style>
+
+
+    </style>
+
+<fieldset>
+    <legend id="lgdItem"></legend>
+
+    <div class="inline">
+        <label for="edtQtd">Qtd</label>
+        <input type="text" id="edtQtd" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnSaveItem')">
+        <label for="edtPreco">Preço</label>
+        <input type="text" id="edtPreco" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnSaveItem')">
+    </div>
+    <div class="inline">
+        <button id="btnSaveItem">Salvar</button>
+        <button id="btnDelItem">Deletar</button>
+    </div>
+</fieldset>
+
+
+</template>
+<script>
+
+    localStorage.setItem('limite',parseFloat(main_data.edtProd.data.edtVal).toFixed(2))
+
+    document.querySelector('#lgdItem').innerHTML = main_data.edtProd.data.nome
+    document.querySelector('#edtQtd').value = parseFloat(main_data.edtProd.data.qtd).toFixed(2)
+    document.querySelector('#edtPreco').value = parseFloat(main_data.edtProd.data.edtVal).toFixed(2)
+
+    document.querySelector('#btnSaveItem').addEventListener('click',()=>{
+        if (confirm('Confirma a alteração do ítem?')) {
+            if(max_itens() && limite_preco()){
+                main_data.edtProd.data.edtItem()
+            }
+        }
+    })
+
+    function max_itens(){
+        if(main_data.edtProd.data.max != undefined){
+            if(parseFloat(main_data.edtProd.data.max) < parseFloat(document.querySelector('#edtQtd').value)){
+                alert('Quantidade digitada superior ao estoque disponível!')
+                document.querySelector('#edtQtd').value = main_data.edtProd.data.max
+                document.querySelector('#edtQtd').focus()
+                return false
+            }
+        }
+        return true
+    }
+
+    function limite_preco(){
+        if(main_data.edtProd.data.callby == 'compra' && main_data.viewLocal.data.mode == 'motorista' && main_data.viewLocal.data.limite == '1'){
+                
+                if(parseFloat(document.querySelector('#edtPreco').value) > localStorage.getItem('limite') ){
+                    alert(`O preço não pode ser editado para cima`)
+                    document.querySelector('#edtPreco').value = localStorage.getItem('limite')
+                    return false
+                }else{
+                    return true
+                }
+        }else{
+            return true
+        }
+    }
+
+    document.querySelector('#btnDelItem').addEventListener('click',()=>{
+
+        if (confirm('Deseja realmente deletar este ítem?')) {
+            main_data.edtProd.data.delItem()
+        }
+  
+    })
+
+    document.querySelector('#edtQtd').addEventListener('focusout',()=>{
+        max_itens()
+    })
+
+    document.querySelector('#edtPreco').addEventListener('focusout',()=>{
+        limite_preco()
+    })
+
+    document.querySelector('#edtQtd').focus()
+
+</script>

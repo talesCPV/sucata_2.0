@@ -29,14 +29,18 @@
         "ADM-0"  => 'CALL sp_view_emp(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
         "ADM-1"  => 'CALL sp_set_emp(@access,@hash,"x00","x01","x02","x03","x04","x05","x06","x07","x08","x09","x10","x11","x12","x13","x14","x15","x16","x17","x18","x19");', // id,nome,fantasia,tipo,cnpj_cpf,ie,im,endereco,num,bairro,cep,cidade,estado,tel,bco_nome,bco_ag,bco_cc,bco_pix,modal,whatsapp
         "ADM-2"  => 'CALL sp_view_comprador(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
-        "ADM-3"  => 'CALL sp_set_comprador(@access,@hash,"x00","x01","x02","x03","x04","x05","x06","x07","x08","x09");', // idid_usuario,id_local,nome,cpf,rg,cnh,tipo,validade,limite
+        "ADM-3"  => 'CALL sp_set_comprador(@access,@hash,x00,x01,"x02","x03","x04","x05","x06","x07","x08","x09");', // id_usuario,id_local,nome,cpf,rg,cnh,tipo,validade,limite
         "ADM-4"  => 'CALL sp_view_local_estq(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
+        "ADM-5"  => 'CALL sp_set_local_estq(@access,@hash,x00,"x01","x02","x03","x04","x05","x06");', // id,ano,modelo,placa,tipo,tara,local
 
         /* CONFIGURAÇÕES */
         "CONF-0" => 'CALL sp_view_unidades(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
         "CONF-1" => 'CALL sp_set_unidade(@access,@hash,x00,"x01","x02");', // ID,NOME,SIGLA
         "CONF-2" => 'CALL sp_view_materiais(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL,VALUE
         "CONF-3" => 'CALL sp_set_material(@access,@hash,x00,"x01","x02","x03","x04");', // ID,NOME,COD,NCM,UND
+
+        /* ESTOQUE */
+        "ESTQ-0" => 'CALL sp_view_estoque(@access,@hash,x00);', // ID_LOCAL
 
 
     );

@@ -1,0 +1,73 @@
+
+<template>
+    <style></style>
+
+        <fieldset class="locais">
+            <legend>Filtro</legend>
+
+            <div class="inline">
+                <label for="edtBusca">por:</label>
+                <select id="cmbBusca">
+                    <option value="modelo" signal="LIKE" selected>Nome</option>
+                    <option value="ano" signal="LIKE">Ano</option>
+                    <option value="placa" signal="LIKE">Placa</option>
+                    <option value="local" signal="=" val="'FIXO'">Galpões</option>               
+                    <option value="local" signal="=" val="'MOVEL'">Veículos</option>               
+                </select>
+                <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+                <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+                <button id="btnNovo" class="btn-round" >+</button>
+            </div>
+            <table id="tblLocal"></table>
+        </fieldset>  
+
+    
+</template>
+<script>
+
+    const pageData = main_data.adm_local_estq.data
+    const pageFunc = main_data.adm_local_estq.func
+    const pageScreen = document.querySelector('#card-adm_local_estq')
+
+    function pageStart(){
+        pageFunc.fillLocal()
+    }
+
+    pageFunc.fillLocal = ()=>{
+        const query = getVal('locais')
+        const tbl = document.getElementById('tblLocal')
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2] 
+        const myPromisse = queryDB(params,'ADM-4');
+
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                const json = JSON.parse(resolve);
+                tbl.head('Descrição,Local,Tipo')
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'modelo,local,tipo')
+                }                
+            } 
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',(e)=>{
+        pageFunc.fillLocal()
+    })
+
+    pageScreen.querySelector('#tblLocal').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.callback = 'main_data.adm_local_estq.func.fillLocal()'
+        openHTML('adm_view_estoque.html','pop-up','Editar Local de Estoque',data)
+//        openHTML('adm_view_local.html','pop-up','Editar Local de Estoque',data)
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('adm_view_local.html','pop-up','Novo Local de Estoque')
+    })
+
+    pageStart()
+
+</script>

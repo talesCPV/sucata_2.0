@@ -70,3 +70,20 @@
 30/09/2024 16:21 tales@planet3.com.br : Material Cadastrado  {"id":0,"nome":"TESTE","cod":"123","ncm":"98765432","und":"UND"}
 30/09/2024 16:21 tales@planet3.com.br : Material Editado  {"id":"4","nome":"TESTE 2","cod":"456BR","ncm":"112233","und":"KG"}
 30/09/2024 16:21 tales@planet3.com.br : Material Deletado  {"id":"4","nome":"","cod":"456BR","ncm":"112233","und":"KG"}
+30/09/2024 16:50 tales@planet3.com.br : Menu Incluido (Estoque)
+30/09/2024 16:50 tales@planet3.com.br : Menu Incluido (Local)
+30/09/2024 16:51 tales@planet3.com.br : Menu Incluido (Produto)
+30/09/2024 16:51 tales@planet3.com.br : Menu Alterado (Estoque, menu, pop-up, )
+30/09/2024 16:52 tales@planet3.com.br : Menu Alterado (Local, menu, pop-up, Local)
+30/09/2024 16:54 tales@planet3.com.br : Menu Alterado (Produto, menu, pop-up, Produtos)
+30/09/2024 19:18 tales@planet3.com.br : Menu Alterado (Local, adm_local_estq.html, pop-up, Local)
+30/09/2024 19:47 tales@planet3.com.br : Local de Estoque Cadastrado  {"id":0,"ano":"","modelo":"TESTE","placa":"","tipo":"PREDIO","tara":"","local":"FIXO"}
+30/09/2024 19:47 tales@planet3.com.br : Local de Estoque Cadastrado  {"id":0,"ano":"","modelo":"TESTE","placa":"","tipo":"PREDIO","tara":"","local":"FIXO"}
+30/09/2024 19:47 tales@planet3.com.br : Local de Estoque Cadastrado  {"id":0,"ano":"","modelo":"TESTE","placa":"","tipo":"PREDIO","tara":"","local":"FIXO"}
+30/09/2024 19:48 tales@planet3.com.br : Local de Estoque Cadastrado  {"id":0,"ano":"","modelo":"TESTE","placa":"","tipo":"PREDIO","tara":"","local":"FIXO"}
+30/09/2024 19:49 tales@planet3.com.br : Local de Estoque Cadastrado  {"id":0,"ano":"1997","modelo":"TESTE","placa":"ABC-1236","tipo":"CAMINHAO","tara":"1500","local":"MOVEL"}
+30/09/2024 19:50 tales@planet3.com.br : Local de Estoque Cadastrado  {"id":0,"ano":"","modelo":"TESTE","placa":"","tipo":"PREDIO","tara":"","local":"FIXO"}
+30/09/2024 19:51 tales@planet3.com.br : Local de Estoque Editado  {"id":"13","ano":"1997","modelo":"TESTE 25","placa":"ABC-1234","tipo":"CAMINHAO","tara":"2500","local":"MOVEL"}
+30/09/2024 19:51 tales@planet3.com.br : Local de Estoque Deletado  {"id":"13","ano":"1997","modelo":"","placa":"ABC-1234","tipo":"CAMINHAO","tara":"2500","local":"MOVEL"}
+30/09/2024 21:25 tales@planet3.com.br : Local de Estoque Editado  {"id":"12","ano":"2017","modelo":"CAMINHAO BRANCO 2","placa":"GJN-8H65","tipo":"CAMINHAO","tara":"0","local":"MOVEL"}
+30/09/2024 21:29 tales@planet3.com.br : Local de Estoque Editado  {"id":"12","ano":"2017","modelo":"CAMINHAO BRANCO","placa":"GJN-8H65","tipo":"CAMINHAO","tara":"0","local":"MOVEL"}

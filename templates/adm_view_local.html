@@ -1,0 +1,125 @@
+<template>
+    <style>
+
+        .frm{
+            display: flex;
+            flex-direction: column;
+        }
+     
+    </style>
+  
+    <fieldset class="frm">
+        <legend>Local</legend>
+        <div class="inline">
+            <label for="edtModelo" id="lblModelo">Modelo*</label>
+            <input type="text" id="edtModelo" class="only-view" maxlength="20" disabled>
+            <label for="cmbLocal">Local</label>
+            <select id="cmbLocal" class="only-view" style="max-width: 150px;" disabled>
+                <option value="FIXO">Fixo</option>
+                <option value="MOVEL" selected>Móvel</option>
+            </select> 
+        </div>
+        <div class="inline">
+            <label for="edtAno">Ano</label>
+            <input type="text" id="edtAno" class="only-view just-veic" maxlength="4" style="max-width: 100px;" onkeyup="return valInt(this)" disabled>
+            <label for="edtPlaca">Placa</label>
+            <input type="text" id="edtPlaca" class="only-view just-veic" maxlength="8" style="max-width: 100px;" onkeyup="return valPlaca(this)" disabled>
+            <label for="cmbTipo">Tipo</label>
+            <select id="cmbTipo" class="only-view just-veic" disabled>
+                <option value="CAMINHÃO" selected>Caminhão</option>
+                <option value="CARRETA">Carreta</option>
+                <option value="UTILITARIO">Utilitário</option>
+                <option value="CARRO">Carro</option>
+                <option value="MOTO">Moto</option>
+            </select>            
+            <label for="edtTara">Tara</label>
+            <input type="text" class="only-view" id="edtTara" placeholder="Tara" onkeyup="return valFloat(this)" value="0" disabled>
+        </div>
+        <div class="line">
+            <button id="btnEdit" disabled><span class="mdi mdi-note-edit"></span>Editar</button>
+            <button id="btnDel" disabled><span class="mdi mdi-delete"></span>Deletar</button>
+            <button id="btnSave" class="only-view" disabled><span class="mdi mdi-content-save"></span>Salvar</button>
+        </div>
+    </fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.adm_view_local.data
+    const pageFunc = main_data.adm_view_local.func
+    const pageScreen = document.querySelector('#card-adm_view_local')
+    const novoReg = !(Object.keys(pageData).length)
+
+    function pageStart(){
+        pageScreen.querySelector('#btnEdit').disabled = novoReg
+        openFields(novoReg)
+        if (!novoReg){
+            pageScreen.querySelector('#edtModelo').value = pageData.modelo
+            pageScreen.querySelector('#edtAno').value = pageData.ano
+            pageScreen.querySelector('#edtPlaca').value = pageData.placa
+            pageScreen.querySelector('#cmbTipo').value = pageData.tipo
+            pageScreen.querySelector('#edtTara').value = pageData.tara
+            pageScreen.querySelector('#cmbLocal').value = pageData.local
+            
+        }else{
+            pageScreen.querySelector('#edtModelo').focus()
+        }
+    }
+
+    function changeLocal(){
+        const veic = pageScreen.querySelectorAll('.just-veic')
+        const fixo = pageScreen.querySelector('#cmbLocal').value == 'FIXO'
+        pageScreen.querySelector('#lblModelo').innerHTML = fixo ? 'Nome Local*' : 'Modelo*'
+        for(let i=0; i<veic.length; i++){
+            veic[i].disabled = fixo
+        }
+    }
+
+    pageFunc.setLocal = (del=0)=>{
+        const local = pageScreen.querySelector('#cmbLocal').value
+
+        const params = new Object;
+            params.id = novoReg ? 0 : pageData.id
+            params.ano = local == 'MOVEL' ? pageScreen.querySelector('#edtAno').value.trim() : ''
+            params.modelo = del ? '' : pageScreen.querySelector('#edtModelo').value.trim().toUpperCase()
+            params.placa = local == 'MOVEL' ? pageScreen.querySelector('#edtPlaca').value : ''
+            params.tipo = local == 'MOVEL' ? pageScreen.querySelector('#cmbTipo').value : 'PRÉDIO'
+            params.tara = local == 'MOVEL' ? pageScreen.querySelector('#edtTara').value : ''
+            params.local = local
+        const myPromisse = queryDB(params,'ADM-5');
+
+        myPromisse.then((resolve)=>{
+            if(pageData.hasOwnProperty('callback')){
+                eval(pageData.callback)
+            }
+            setLog(`Local de Estoque ${del ? 'Deletado ': novoReg ? 'Cadastrado ':'Editado '} ${JSON.stringify(params)}`)
+            closeModal('adm_view_local')
+        })
+    }
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        openFields()
+        changeLocal()
+        pageScreen.querySelector('#btnDel').disabled = 0
+        pageScreen.querySelector('#btnEdit').disabled = 1
+    })
+
+    pageScreen.querySelector('#cmbLocal').addEventListener('change',()=>{
+        changeLocal()
+    })
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        if(checkField(['edtModelo']) ){
+            pageFunc.setLocal()
+        }        
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if (confirm('Deseja realmente deletar este local?')) {
+            pageFunc.setLocal(1)
+        }
+    })
+
+    pageStart()
+
+</script>

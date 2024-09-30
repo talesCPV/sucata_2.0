@@ -1,0 +1,209 @@
+
+<template>
+    <style>
+
+        #tblLocal tr th{
+            font-size: 0.9em;
+            max-width: 20%;
+        }
+
+        .head-item{
+            display: flex;            
+        }
+
+        .btnHide{
+            display: none;
+        }
+
+        @media all and (max-width : 768px) {
+
+            #btnComp{
+                background-color: crimson;
+                color: floralwhite;
+                border-radius: 7px;
+            }
+        }
+
+    </style>
+    
+    <fieldset id="fdsComp">
+        <legend>Local</legend>
+        <table id="tblLocal">
+            <tr><th>Nome</th><th id="lblTipo">Tipo</th><th>Peso</th><th>Valor R$</th></tr>
+            <tr><td id="via-nome"></td><td id="via-tipo"></td><td id="via-peso"></td><td id="via-valor"></td></tr>
+        </table>
+        <div class="line">
+            <button id="btnComp"><span class="mdi mdi-cash-multiple"></span> Comprar</button>
+            <button id="btnVend" class="btnHide"><span class="mdi mdi-cash-register"></span> Vender</button>
+            <button id="btnTrans" class="btnHide"><span class="mdi mdi-swap-horizontal"></span> Transferir</button>
+
+        </div>
+
+    </fieldset>
+    <fieldset>
+        <legend>Ítens</legend>
+        <table id="tblItens-viagem"></table>
+        <div class="line">
+            <button id="btnImp" class="btnHide"><span class="mdi mdi-printer"></span> Imprimir</button>
+        </div>
+
+
+
+    </fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.adm_view_estoque.data
+    const pageFunc = main_data.adm_view_estoque.func
+    const pageScreen = document.querySelector('#card-adm_view_estoque')
+    const novoReg = !(Object.keys(pageData).length)
+
+    function pageStart(){
+        pageFunc.fillItens()
+        if (!novoReg){
+            pageScreen.querySelector('#via-nome').innerHTML = pageData.modelo.toUpperCase()
+            pageScreen.querySelector('#via-tipo').innerHTML = pageData.local.toUpperCase()
+            pageScreen.querySelector('#via-peso').innerHTML = ''
+            pageScreen.querySelector('#via-valor').innerHTML = ''
+            pageScreen.querySelector('#btnTrans').style.display = 'block'
+            pageScreen.querySelector('#btnVend').style.display = 'block'
+            pageScreen.querySelector('#btnImp').style.display = 'block'            
+        }else{
+            pageScreen.querySelector('#edtModelo').focus()
+        }
+
+    }
+
+
+
+    pageFunc.open = ()=>{
+
+
+        if(pageData.mode == 'edit'){
+
+
+            
+
+        }else if (pageData.mode == 'motorista'){
+            const params = new Object;
+                params.hash = localStorage.getItem('hash')
+                params.user = localStorage.getItem('username')
+            const myPromisse = queryDB(params,28);
+            myPromisse.then((resolve)=>{  
+                const json = JSON.parse(resolve)            
+                pageData.id = json[0].id_local
+                pageData.limite = json[0].limite
+
+                pageScreen.querySelector('#via-nome').innerHTML = json[0].modelo.toUpperCase()
+                pageScreen.querySelector('#via-tipo').innerHTML = json[0].placa.toUpperCase()
+                pageScreen.querySelector('#lblTipo').innerHTML = 'Placa'
+                pageData.modelo = json[0].modelo.toUpperCase()
+
+
+                pageFunc.fillItens()
+            })
+
+
+        }
+
+        pageScreen.querySelector('#btnImp').disabled = false
+
+
+    }
+
+    pageFunc.fillItens = ()=>{
+        const params = new Object;
+            params.id_local = pageData.id       
+        const myPromisse = queryDB(params,'ESTQ-0');
+        myPromisse.then((resolve)=>{
+            pageData.itens = JSON.parse(resolve)
+            const tbl = pageScreen.querySelector('#tblItens-viagem')
+            const tot = new Object
+                tot.peso = 0
+                tot.val = 0
+            tbl.head('Descrição,Und.|mobHide,Qtd.,Preço Unit.,Sub Total')            
+            for(let i=0; i<pageData.itens.length;i++){
+                if(parseFloat(pageData.itens[i].qtd) > 0 ){
+                    tbl.plot(pageData.itens[i],'nome,und|mobHide,qtd,val_unit,total','Upp,Upp,str,R$.,R$.')
+                    tot.val += parseFloat(pageData.itens[i].total)
+                    tot.peso += parseFloat(pageData.itens[i].qtd)
+                }
+            }
+//            tbl.plot(tot,'blank,blank|mobHide,blank,label,val','str,str,str,Upp,R$.')
+            pageScreen.querySelector('#via-valor').innerHTML = viewMoneyBR(tot.val.toFixed(2))
+            pageScreen.querySelector('#via-peso').innerHTML = tot.peso.toFixed(2)+' Kg'
+        })
+    }
+
+    pageScreen.querySelector('#btnComp').addEventListener('click',()=>{
+        openHTML('compra.html','pop-up','D2Soft',{callby:'viewLocal'})
+    })
+
+    pageScreen.querySelector('#btnVend').addEventListener('click',()=>{        
+        openHTML('venda.html','pop-up','D2Soft',{mode:'venda'})
+    })
+
+    pageScreen.querySelector('#btnTrans').addEventListener('click',()=>{        
+        openHTML('transf.html','pop-up','Transferência de Material',{mode:'transf'})
+    })
+
+    pageScreen.querySelector('#tblLocal').addEventListener('click',()=>{
+        openHTML('adm_view_local.html','pop-up','Editar Local de Estoque',pageData)
+    })
+
+    pageScreen.querySelector('#tblItens-viagem').addEventListener('click',(e)=>{
+  
+            const data = e.target.parentNode.data
+         
+            data.edtItem = function(){
+                const qtd_ant = main_data.edtProd.data.qtd
+                const params = new Object;
+                    params.id_local = main_data.edtProd.data.id_local
+                    params.id_prod = main_data.edtProd.data.id_prod
+                    params.qtd = pageScreen.querySelector('#edtQtd').value
+                    params.und = main_data.edtProd.data.und
+                    params.val_unit = pageScreen.querySelector('#edtPreco').value
+                const myPromisse = queryDB(params,48);                               
+                myPromisse.then((resolve)=>{
+                    if(resolve.trim() != ""){
+                        setLog(`Alteracao de estoque, de ${qtd_ant}Kg p/ ${pageScreen.querySelector('#edtQtd').value}Kg de ${main_data.edtProd.data.nome} em ${pageData.modelo}`)
+                        main_data.viewLocal.fillItens()
+                        closeModal('edtProd')
+                    }  
+                })            
+                                    
+            }
+            data.delItem = function(){               
+                const params = new Object;
+                    params.id_local = main_data.edtProd.data.id_local
+                    params.id_prod = main_data.edtProd.data.id_prod
+                    params.hash = localStorage.getItem('hash')                
+                const myPromisse = queryDB(params,34);
+                myPromisse.then((resolve)=>{
+                    if(resolve.trim() != ""){
+                        setLog(`Ítem deletado: ${main_data.edtProd.data.nome} em ${pageData.modelo}`)
+                        main_data.viewLocal.fillItens()
+                        closeModal('edtProd')
+                    }  
+                }) 
+            }
+            
+            data.callby = 'viewLocal'
+            data.edtVal = data.val_unit
+            if(data.id_local != undefined && pageData.mode != 'motorista'){
+                openHTML('edtProd.html','pop-up','Alteração de Ítem',data)
+            }
+        
+    })
+
+    pageScreen.querySelector('#btnImp').addEventListener('click',()=>{
+        pageData.callby = 'viewLocal'
+        pageData.peso = pageScreen.querySelector('#via-peso').innerHTML
+        print_compra(pageData)
+
+    })
+
+    pageStart()
+
+</script>
