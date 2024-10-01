@@ -592,3 +592,78 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_estoque;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_estoque(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_local int(11),
+		IN Iid_prod int(11),
+		IN Iqtd double,
+		IN Iund varchar(10),
+		IN Ival_unit double
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iqtd=0)THEN
+				DELETE FROM tb_item_estoque WHERE id_local=Iid_local AND id_prod=Iid_prod;
+            ELSE
+				INSERT INTO tb_item_estoque (id_local,id_prod,qtd,und,val_unit) 
+					VALUES (Iid_local,Iid_prod,Iqtd,Iund,Ival_unit)
+                    ON DUPLICATE KEY UPDATE qtd=Iqtd,val_unit=Ival_unit;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+/* PRODUTO */
+
+DROP PROCEDURE IF EXISTS sp_view_produto;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_produto(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Inome varchar(20)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @quer =CONCAT('SELECT * FROM vw_produto WHERE nome LIKE "%',Inome,'%" ORDER BY nome;');
+			PREPARE stmt1 FROM @quer;
+			EXECUTE stmt1;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_produto;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_produto(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid int(11),
+		IN Inome varchar(20),
+		IN Iund varchar(10),
+		IN Ipreco double,
+		IN Imargem double,
+		IN Iid_mat int(11)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome="")THEN
+				DELETE FROM tb_prod WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_prod (nome,und,preco,margem,id_mat) 
+					VALUES (Inome,Iund,Ipreco,Imargem,Iid_mat);
+                ELSE
+					UPDATE tb_prod 
+                    SET nome=Inome,und=Iund,preco=Ipreco,margem=Imargem,id_mat=Iid_mat
+					WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

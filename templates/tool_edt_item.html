@@ -1,22 +1,19 @@
 
 <template>
-    <style>
-
-
-    </style>
+    <style></style>
 
 <fieldset>
     <legend id="lgdItem"></legend>
 
     <div class="inline">
         <label for="edtQtd">Qtd</label>
-        <input type="text" id="edtQtd" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnSaveItem')">
+        <input type="text" id="edtQtd" onfocus="this.select();" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnSave')">
         <label for="edtPreco">Preço</label>
-        <input type="text" id="edtPreco" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnSaveItem')">
+        <input type="text" id="edtPreco" onfocus="this.select();" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnSave')">
     </div>
-    <div class="inline">
-        <button id="btnSaveItem">Salvar</button>
-        <button id="btnDelItem">Deletar</button>
+    <div class="line">
+        <button id="btnSave"><span class="mdi mdi-content-save-outline"></span> Salvar</button>
+        <button id="btnDel"><span class="mdi mdi-delete-outline"></span> Deletar</button>
     </div>
 </fieldset>
 
@@ -24,26 +21,37 @@
 </template>
 <script>
 
-    localStorage.setItem('limite',parseFloat(main_data.edtProd.data.edtVal).toFixed(2))
+    const pageData = main_data.tool_edt_item.data
+    const pageFunc = main_data.tool_edt_item.func
+    const pageScreen = document.querySelector('#card-tool_edt_item')
 
-    document.querySelector('#lgdItem').innerHTML = main_data.edtProd.data.nome
-    document.querySelector('#edtQtd').value = parseFloat(main_data.edtProd.data.qtd).toFixed(2)
-    document.querySelector('#edtPreco').value = parseFloat(main_data.edtProd.data.edtVal).toFixed(2)
+    function pageStart(){
+        pageScreen.querySelector('#lgdItem').innerHTML = pageData.nome
+        pageScreen.querySelector('#edtQtd').value = parseFloat(pageData.qtd).toFixed(2)
+        pageScreen.querySelector('#edtPreco').value = parseFloat(pageData.val_unit).toFixed(2)
+        pageScreen.querySelector('#edtQtd').focus()
 
-    document.querySelector('#btnSaveItem').addEventListener('click',()=>{
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         if (confirm('Confirma a alteração do ítem?')) {
             if(max_itens() && limite_preco()){
-                main_data.edtProd.data.edtItem()
+                if(pageData.hasOwnProperty('callback')){
+                    const qtd = pageScreen.querySelector('#edtQtd').value
+                    const val_unit = pageScreen.querySelector('#edtPreco').value
+                    pageData.callback(pageData.id_local,pageData.id_prod,qtd,pageData.und,val_unit)
+                    closeModal('tool_edt_item')
+                }
             }
         }
     })
 
     function max_itens(){
-        if(main_data.edtProd.data.max != undefined){
-            if(parseFloat(main_data.edtProd.data.max) < parseFloat(document.querySelector('#edtQtd').value)){
+        if(pageData.max != undefined){
+            if(parseFloat(pageData.max) < parseFloat(pageScreen.querySelector('#edtQtd').value)){
                 alert('Quantidade digitada superior ao estoque disponível!')
-                document.querySelector('#edtQtd').value = main_data.edtProd.data.max
-                document.querySelector('#edtQtd').focus()
+                pageScreen.querySelector('#edtQtd').value = pageData.max
+                pageScreen.querySelector('#edtQtd').focus()
                 return false
             }
         }
@@ -51,11 +59,10 @@
     }
 
     function limite_preco(){
-        if(main_data.edtProd.data.callby == 'compra' && main_data.viewLocal.data.mode == 'motorista' && main_data.viewLocal.data.limite == '1'){
-                
-                if(parseFloat(document.querySelector('#edtPreco').value) > localStorage.getItem('limite') ){
+        if(pageData.callby == 'compra' && main_data.viewLocal.data.mode == 'motorista' && main_data.viewLocal.data.limite == '1'){
+                if(parseFloat(pageScreen.querySelector('#edtPreco').value) > localStorage.getItem('limite') ){
                     alert(`O preço não pode ser editado para cima`)
-                    document.querySelector('#edtPreco').value = localStorage.getItem('limite')
+                    pageScreen.querySelector('#edtPreco').value = localStorage.getItem('limite')
                     return false
                 }else{
                     return true
@@ -65,22 +72,22 @@
         }
     }
 
-    document.querySelector('#btnDelItem').addEventListener('click',()=>{
-
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
         if (confirm('Deseja realmente deletar este ítem?')) {
-            main_data.edtProd.data.delItem()
+            if(pageData.hasOwnProperty('callback')){
+                pageData.callback(pageData.id_local,pageData.id_prod,0,pageData.und,0)
+            }
         }
-  
     })
 
-    document.querySelector('#edtQtd').addEventListener('focusout',()=>{
+    pageScreen.querySelector('#edtQtd').addEventListener('focusout',()=>{
         max_itens()
     })
 
-    document.querySelector('#edtPreco').addEventListener('focusout',()=>{
+    pageScreen.querySelector('#edtPreco').addEventListener('focusout',()=>{
         limite_preco()
     })
 
-    document.querySelector('#edtQtd').focus()
+    pageStart()
 
 </script>

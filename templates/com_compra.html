@@ -1,0 +1,233 @@
+
+<template>
+    <style>
+
+        @media all and (max-width : 768px) {
+
+            #btnAdd{
+                background-color: crimson;
+                color: floralwhite;
+                border-radius: 7px;
+            }
+        }
+
+
+    </style>
+ 
+        <fieldset>
+            <legend>Compra</legend>
+            <div class="inline">
+                <label for="edtCliente">Cliente</label>
+                <div class="edtbtn">
+                    <input type="text" id="edtCliente" readonly>
+                    <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+                </div>
+            </div>
+            <div class="line">
+                <button id="btnAdd"><span class="mdi mdi-plus"></span> Produtos</button>
+                <button id="btnClear"><span class="mdi mdi-eraser"></span> Limpar</button>
+                <button id="btnCompra"><span class="mdi mdi-cash-check"></span> Comprar</button>
+            </div>
+            <table id="tbl-itens_compra"></table>
+        </fieldset>
+
+</template>
+<script>
+ 
+    const pageData = main_data.com_compra.data
+    const pageFunc = main_data.com_compra.func
+    const pageScreen = document.querySelector('#card-com_compra')
+
+
+    function buscaCli(data){
+        pageScreen.querySelector('#edtCliente').data = data
+        pageScreen.querySelector('#edtCliente').value = data.nome
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        openHTML('adm_clientes.html','pop-up','Selecione um Cliente',{'callback':buscaCli},600)
+    })
+
+    pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
+        main_data.compra.data.addItem = function(data){
+            
+        }
+
+        main_data.compra.data.callby = 'compra'
+        openHTML('addProd.html','pop-up','Adicione um Produto',main_data.compra.data)
+
+    })
+
+    pageFunc.fillClientes = ()=>{
+        const params_cli = new Object;
+            params_cli.field = 'modal'
+            params_cli.signal = '!='
+            params_cli.value = '"CLI"' 
+        fillCombo('cmbCli_compra',params_cli,1,['id','fantasia'], '#')
+    }
+
+    pageFunc.fillTemp = ()=>{
+        const params = new Object;
+            params.id_local = main_data.viewLocal.data.id       
+        const myPromisse = queryDB(params,35);
+        myPromisse.then((resolve)=>{
+            main_data.compra.data.itens_temp = JSON.parse(resolve)
+            const tbl = pageScreen.querySelector('#tbl-itens_compra')
+            const tot = new Object
+                tot.blank = ''
+                tot.lblTot = 'TOTAL'
+                tot.lblPeso = 'PESO TOTAL'
+                tot.peso = 0
+                tot.val = 0            
+            tbl.head('Descrição,Und.|mobHide,Qtd.,Preço,Sub-Total')            
+            for(let i=0; i<main_data.compra.data.itens_temp.length;i++){
+                tbl.plot(main_data.compra.data.itens_temp[i],'nome,und|mobHide,qtd,val_venda,total','Upp,Upp,str,R$.,R$.')
+                tot.val += parseFloat(main_data.compra.data.itens_temp[i].total)
+                tot.peso += parseFloat(main_data.compra.data.itens_temp[i].qtd)                
+            }
+            tot.peso += ' Kg'
+            tbl.plot(tot,'blank|mobHide,lblPeso,peso,lblTot,val','str,str,str,Upp,R$.')
+
+        })
+    }
+/*
+    main_data.compra.fillTemp()
+    main_data.compra.fillClientes()
+*/
+    pageScreen.querySelector('#tbl-itens_compra').addEventListener('click',(e)=>{
+        
+        const data = e.target.parentNode.data
+        
+        data.edtItem = function(){
+            const val_ant = main_data.edtProd.data.val_venda
+            const params = new Object;
+                params.id = main_data.edtProd.data.id 
+                params.id_local = main_data.edtProd.data.id_local
+                params.id_prod = main_data.edtProd.data.id_prod
+                params.nome = main_data.edtProd.data.nome
+                params.qtd = pageScreen.querySelector('#edtQtd').value
+                params.und = main_data.edtProd.data.und
+                params.preco = pageScreen.querySelector('#edtPreco').value
+            const myPromisse = queryDB(params,36);
+                            
+            myPromisse.then((resolve)=>{
+                if(resolve.trim() != ""){
+                    setLog(`Alteração de preço de compra: ${main_data.edtProd.data.nome}, de R$${parseFloat(val_ant).toFixed(2)} p/ R$${parseFloat(pageScreen.querySelector('#edtPreco').value).toFixed(2)} em ${main_data.viewLocal.data.modelo}`)
+                    main_data.compra.fillTemp()
+                    closeModal('edtProd')
+                }  
+            })                                
+        }
+
+        data.delItem = function(){               
+            const params = new Object;
+                params.id = main_data.edtProd.data.id
+                params.hash = localStorage.getItem('hash')                
+            const myPromisse = queryDB(params,37);
+            myPromisse.then((resolve)=>{
+                if(resolve.trim() != ""){
+                    main_data.compra.fillTemp()
+                    closeModal('edtProd')
+                }  
+            }) 
+        }
+
+        data.callby = 'compra'
+        data.edtVal = data.val_venda
+        if(data.id != undefined){
+            openHTML('edtProd.html','pop-up','Alteração de Ítem',data)
+        }
+        
+    })
+
+    pageScreen.querySelector('#btnCompra').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#cmbCli_compra').value.trim() != ''){
+            if (confirm('Deseja realmente efetuar esta compra?')) {
+                const now = new Date
+                const params = new Object; // cria compra
+                    params.id = 'DEFAULT' 
+                    params.id_cliente = pageScreen.querySelector('#cmbCli_compra').value
+                    params.id_resp = localStorage.getItem('id_user')
+                    params.status = 'FECHADO'
+                    params.obs = `Compra realizada dia ${now.getFullDate()} pelo usuário ${localStorage.getItem('username')}.`
+                    params.data = now.getFullDateTime()
+                    params.id_local = main_data.viewLocal.data.id
+                const myPromisse = queryDB(params,41);
+                myPromisse.then((resolve)=>{
+                    if(resolve.trim() != ""){
+                        const sel = pageScreen.querySelector('#cmbCli_compra')
+                        let total = 0
+                        for(let i=0; i<main_data.compra.data.itens_temp.length; i++){
+
+                            const params_itens = new Object; // adiciona item compra
+                                params_itens.id = 'DEFAULT' 
+                                params_itens.id_compra = '(SELECT MAX(id) FROM tb_compra)'
+                                params_itens.id_prod = main_data.compra.data.itens_temp[i].id_prod
+                                params_itens.qtd = main_data.compra.data.itens_temp[i].qtd
+                                params_itens.und = main_data.compra.data.itens_temp[i].und
+                                params_itens.val_unit = main_data.compra.data.itens_temp[i].val_venda
+                                params_itens.id_local_origem = main_data.viewLocal.data.id
+                            const myPromisse_itens = queryDB(params_itens,42);
+
+                            total += (parseFloat(params_itens.qtd) * parseFloat(params_itens.val_unit))
+
+                            const params_update = new Object // atualiza estoque
+                                params_update.id_local = main_data.viewLocal.data.id
+                                params_update.id_prod = main_data.compra.data.itens_temp[i].id_prod
+                                params_update.qtd = main_data.compra.data.itens_temp[i].qtd
+                                params_update.und = main_data.compra.data.itens_temp[i].und
+                                params_update.val_unit = main_data.compra.data.itens_temp[i].val_venda
+                            const myPromisse_update = queryDB(params_update,30);  
+                            setLog(`Compra ${main_data.compra.data.itens_temp[i].qtd}Kg de ${main_data.compra.data.itens_temp[i].nome} por R$${main_data.compra.data.itens_temp[i].val_venda} para ${sel.options[sel.selectedIndex].text}  `)
+                        }
+
+                        const params_saldo = new Object // atualiza saldo
+                            params_saldo.id = 'DEFAULT'
+                            params_saldo.id_cliente = pageScreen.querySelector('#cmbCli_compra').value
+                            params_saldo.data = now.getFullDateTime()
+                            params_saldo.valor = total
+                            params_saldo.tipo = 'PAGAR'
+                            params_saldo.quitado = false
+                            params_saldo.obs = params.obs
+                            params_saldo.id_origem = '(SELECT MAX(id) FROM tb_compra)'
+                            params_saldo.tb_origem = 'tb_compra'
+                           
+                        const myPromisse_saldo = queryDB(params_saldo,58); 
+
+                        const params_del_temp = new Object; // deleta venda temporaria
+                            params_del_temp.id_local = main_data.viewLocal.data.id
+                            params_del_temp.hash = localStorage.getItem('hash')
+                        const myPromisse_del_itens = queryDB(params_del_temp,37);
+
+                        myPromisse_del_itens.then((resolve)=>{
+                            alert('Compra Realizada com sucesso!')
+                            main_data.viewLocal.fillItens()
+                            closeModal('compra')
+                        })
+
+                    }  
+                })               
+            }
+
+        }else{
+            alert('Por favor, selecione um cliente para a compra.')
+            pageScreen.querySelector('#cmbCli_compra').focus()
+        }
+
+        
+    })
+
+    pageScreen.querySelector('#btnClear').addEventListener('click',()=>{
+        if (confirm('Deseja eliminar todos os ítens da lista?')) {
+            const params_del_temp = new Object; // deleta venda temporaria
+                params_del_temp.id_local = main_data.viewLocal.data.id
+                params_del_temp.hash = localStorage.getItem('hash')
+            const myPromisse_del_itens = queryDB(params_del_temp,37);
+            myPromisse_del_itens.then((resolve)=>{
+                main_data.compra.fillTemp()
+            })
+        }
+    })
+
+
+</script>

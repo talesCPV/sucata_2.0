@@ -1,0 +1,72 @@
+
+<template>
+    <style>
+        .tbl-show{
+            max-height: 550px;
+            overflow: scroll;
+        }
+    </style>
+      <fieldset>
+        <legend>Filtro</legend>
+
+        <div class="inline">
+            <label for="edtBusca">por:</label>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round" >+</button>
+
+        </div>
+    </fieldset>
+    <div class="tbl-show">
+        <table id="tblProd"></table>
+    </div>        
+ 
+</template>
+<script>
+
+    const pageData = main_data.adm_produtos.data
+    const pageFunc = main_data.adm_produtos.func
+    const pageScreen = document.querySelector('#card-adm_produtos')
+    const delivery = pageData.hasOwnProperty('callback')
+
+    function pageStart(){
+        pageScreen.querySelector('#edtBusca').focus()
+        delivery ? pageFunc.fillProd() : null
+    }
+
+    pageFunc.fillProd = ()=>{
+        const tbl = document.getElementById('tblProd')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.nome = document.querySelector('#edtBusca').value.trim();
+
+        const myPromisse = queryDB(params,'ESTQ-2');
+
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                const json = JSON.parse(resolve);                            
+                tbl.head('Nome,Und.,Compra,Qtd.')
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'nome,und,compra,qtd_tot','str,UPP,R$.,str')
+                }                
+            } 
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillProd()
+    })
+
+    pageScreen.querySelector('#tblProd').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.callback = pageFunc.fillProd
+        openHTML('adm_view_produto.html','pop-up','Editar Produto',data)
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('adm_view_produto.html','pop-up','Novo Produto')
+    })
+
+    pageStart()
+
+</script>

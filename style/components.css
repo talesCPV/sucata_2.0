@@ -41,6 +41,10 @@
         justify-content: center;
       }
       
+      .btn-round .mdi-magnify{
+        font-size: 1em !important;
+      }
+
       .btn-round:hover{
         border: solid 2px #16a083;
         color: #16a083;

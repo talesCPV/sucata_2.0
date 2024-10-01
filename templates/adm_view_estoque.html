@@ -75,41 +75,21 @@
 
     }
 
-
-
-    pageFunc.open = ()=>{
-
-
-        if(pageData.mode == 'edit'){
-
-
-            
-
-        }else if (pageData.mode == 'motorista'){
-            const params = new Object;
-                params.hash = localStorage.getItem('hash')
-                params.user = localStorage.getItem('username')
-            const myPromisse = queryDB(params,28);
-            myPromisse.then((resolve)=>{  
-                const json = JSON.parse(resolve)            
-                pageData.id = json[0].id_local
-                pageData.limite = json[0].limite
-
-                pageScreen.querySelector('#via-nome').innerHTML = json[0].modelo.toUpperCase()
-                pageScreen.querySelector('#via-tipo').innerHTML = json[0].placa.toUpperCase()
-                pageScreen.querySelector('#lblTipo').innerHTML = 'Placa'
-                pageData.modelo = json[0].modelo.toUpperCase()
-
-
-                pageFunc.fillItens()
-            })
-
-
-        }
-
-        pageScreen.querySelector('#btnImp').disabled = false
-
-
+    pageFunc.setItem =(id_local,id_prod,qtd,und,valor)=>{
+        const params = new Object;
+            params.id_local = id_local
+            params.id_prod = id_prod
+            params.qtd = qtd
+            params.und = und
+            params.val_unit = valor
+        const myPromisse = queryDB(params,'ESTQ-1');
+        myPromisse.then((resolve)=>{
+            if(pageData.hasOwnProperty('callback')){
+                eval(pageData.callback)
+            }
+            setLog(`Ítem de Estoque ${qtd==0 ? 'Deletado ': 'Cadastrado '} ${JSON.stringify(params)}`)
+            pageFunc.fillItens()            
+        })
     }
 
     pageFunc.fillItens = ()=>{
@@ -124,20 +104,20 @@
                 tot.val = 0
             tbl.head('Descrição,Und.|mobHide,Qtd.,Preço Unit.,Sub Total')            
             for(let i=0; i<pageData.itens.length;i++){
+                pageData.itens[i].edt_val = pageData.itens[i].val_unit
                 if(parseFloat(pageData.itens[i].qtd) > 0 ){
                     tbl.plot(pageData.itens[i],'nome,und|mobHide,qtd,val_unit,total','Upp,Upp,str,R$.,R$.')
                     tot.val += parseFloat(pageData.itens[i].total)
                     tot.peso += parseFloat(pageData.itens[i].qtd)
                 }
             }
-//            tbl.plot(tot,'blank,blank|mobHide,blank,label,val','str,str,str,Upp,R$.')
             pageScreen.querySelector('#via-valor').innerHTML = viewMoneyBR(tot.val.toFixed(2))
             pageScreen.querySelector('#via-peso').innerHTML = tot.peso.toFixed(2)+' Kg'
         })
     }
 
     pageScreen.querySelector('#btnComp').addEventListener('click',()=>{
-        openHTML('compra.html','pop-up','D2Soft',{callby:'viewLocal'})
+        openHTML('com_compra.html','pop-up','D2Soft',{callby:'viewLocal'},600)
     })
 
     pageScreen.querySelector('#btnVend').addEventListener('click',()=>{        
@@ -153,55 +133,15 @@
     })
 
     pageScreen.querySelector('#tblItens-viagem').addEventListener('click',(e)=>{
-  
-            const data = e.target.parentNode.data
-         
-            data.edtItem = function(){
-                const qtd_ant = main_data.edtProd.data.qtd
-                const params = new Object;
-                    params.id_local = main_data.edtProd.data.id_local
-                    params.id_prod = main_data.edtProd.data.id_prod
-                    params.qtd = pageScreen.querySelector('#edtQtd').value
-                    params.und = main_data.edtProd.data.und
-                    params.val_unit = pageScreen.querySelector('#edtPreco').value
-                const myPromisse = queryDB(params,48);                               
-                myPromisse.then((resolve)=>{
-                    if(resolve.trim() != ""){
-                        setLog(`Alteracao de estoque, de ${qtd_ant}Kg p/ ${pageScreen.querySelector('#edtQtd').value}Kg de ${main_data.edtProd.data.nome} em ${pageData.modelo}`)
-                        main_data.viewLocal.fillItens()
-                        closeModal('edtProd')
-                    }  
-                })            
-                                    
-            }
-            data.delItem = function(){               
-                const params = new Object;
-                    params.id_local = main_data.edtProd.data.id_local
-                    params.id_prod = main_data.edtProd.data.id_prod
-                    params.hash = localStorage.getItem('hash')                
-                const myPromisse = queryDB(params,34);
-                myPromisse.then((resolve)=>{
-                    if(resolve.trim() != ""){
-                        setLog(`Ítem deletado: ${main_data.edtProd.data.nome} em ${pageData.modelo}`)
-                        main_data.viewLocal.fillItens()
-                        closeModal('edtProd')
-                    }  
-                }) 
-            }
-            
-            data.callby = 'viewLocal'
-            data.edtVal = data.val_unit
-            if(data.id_local != undefined && pageData.mode != 'motorista'){
-                openHTML('edtProd.html','pop-up','Alteração de Ítem',data)
-            }
-        
+        const data = e.target.parentNode.data
+            data.callback = pageFunc.setItem
+        openHTML('tool_edt_item.html','pop-up','Editar Local de Estoque',data,600)
     })
 
     pageScreen.querySelector('#btnImp').addEventListener('click',()=>{
         pageData.callby = 'viewLocal'
         pageData.peso = pageScreen.querySelector('#via-peso').innerHTML
         print_compra(pageData)
-
     })
 
     pageStart()

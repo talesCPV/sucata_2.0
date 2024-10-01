@@ -1,0 +1,162 @@
+<template>
+    <style></style>
+  
+    <fieldset class="frm">
+        <legend>Produto</legend>
+        <div class="inline">
+            <label for="edtNome">Nome*</label>
+            <input type="text" id="edtNome" class="only-view" placeholder="Nome" maxlength="20" disabled>
+            <label for="cmbMat">Material</label>
+            <select id="cmbMat" class="only-view" disabled></select>
+        </div>
+        <div class="inline">
+            <label for="cmbUnd">Und.</label>
+            <select id="cmbUnd" class="only-view" disabled></select>
+            <label for="edtPreco">Preço Compra*</label>
+            <input type="text" id="edtPreco" class="only-view" onfocus="this.select();" inputmode="decimal" placeholder="Preço" onkeyup="return valFloat(this)" disabled>
+            <label for="edtMargem">Preço Venda*</label>
+            <input type="text" id="edtMargem" class="only-view" onfocus="this.select();" inputmode="decimal" placeholder="Markup" onkeyup="return valFloat(this)" disabled>
+        </div>        
+        <div class="line">
+            <button id="btnEdit" disabled><span class="mdi mdi-note-edit"></span>Editar</button>
+            <button id="btnDel" disabled><span class="mdi mdi-delete"></span>Deletar</button>
+            <button id="btnSave" class="only-view" disabled><span class="mdi mdi-content-save"></span>Salvar</button>
+        </div>
+        <table id="tblLocal"></table>
+    </fieldset>
+
+</template>
+<script>
+
+    const pageData = main_data.adm_view_produto.data
+    const pageFunc = main_data.adm_view_produto.func
+    const pageScreen = document.querySelector('#card-adm_view_produto')
+    const novoReg = !(Object.keys(pageData).length)
+
+    function pageStart(){
+        pageScreen.querySelector('#btnEdit').disabled = novoReg
+        openFields(novoReg)
+        fillUnd()
+        fillMat()
+        if (!novoReg){
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtPreco').value = pageData.compra
+            pageScreen.querySelector('#edtMargem').value = pageData.venda
+        }else{
+            pageScreen.querySelector('#edtNome').focus()
+        }
+
+    }
+
+    function fillUnd(){
+        const params = new Object;
+            params.field = 'nome'
+            params.signal = 'LIKE'
+            params.value = "'%%'"
+        const myPromisse = queryDB(params,'CONF-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const combo = pageScreen.querySelector('#cmbUnd')
+            combo.innerHTML = ''
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].nome
+                opt.value = json[i].nome
+                opt.selected = json[i].nome == pageData.und ? 1 : 0
+                combo.appendChild(opt)
+            }         
+        })
+    }
+
+    function fillMat(){
+        const params = new Object;
+            params.field = 'nome'
+            params.signal = 'LIKE'
+            params.value = "'%%'"      
+
+        const myPromisse = queryDB(params,'CONF-2')
+
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const combo = pageScreen.querySelector('#cmbMat')
+            combo.innerHTML = ''
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].nome
+                opt.value = json[i].id
+                opt.selected = json[i].id == pageData.id_mat ? 1 : 0
+                combo.appendChild(opt)
+            }  
+        })
+    }
+
+
+    pageFunc.fillLocal = ()=>{
+        const tbl = pageScreen.getElementById('tblLocal')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.id_prod = main_data.viewProd.data.id
+
+        const myPromisse = queryDB(params,39);
+
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                const json = JSON.parse(resolve);                                         
+                tbl.head('Local,Qtd.')
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'modelo,qtd_tot','UPP,str')
+                }                
+            } 
+        })
+    }
+
+    pageFunc.setProd = (del=0)=>{
+        const params = new Object;
+            params.id = novoReg ? 0 : pageData.id
+            params.nome = del ? '' : pageScreen.querySelector('#edtNome').value.trim().toUpperCase()
+            params.und = pageScreen.querySelector('#cmbUnd').value
+            params.preco = pageScreen.querySelector('#edtPreco').value
+            params.margem = pageScreen.querySelector('#edtMargem').value
+            params.id_mat = pageScreen.querySelector('#cmbMat').value
+
+        const myPromisse = queryDB(params,'ESTQ-3');
+
+        myPromisse.then((resolve)=>{
+            if(pageData.hasOwnProperty('callback')){
+                pageData.callback()
+            }
+            setLog(`Produto ${del ? 'Deletado ': novoReg ? 'Cadastrado ':'Editado '} ${JSON.stringify(params)}`)
+            closeModal('adm_view_produto')
+        })
+
+    }
+
+
+//    main_data.viewProd.fillDetal()
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        if(checkField(['edtNome','edtPreco','edtMargem']) ){
+            pageFunc.setProd()        }        
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if (confirm('Deseja realmente deletar este Produto?')) {
+            pageFunc.setProd(1)
+        }
+    })
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        openFields()
+        pageScreen.querySelector('#btnDel').disabled = 0
+        pageScreen.querySelector('#btnEdit').disabled = 1
+    })
+
+    pageScreen.querySelector('#tblLocal').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        data.mode = 'edit'
+        openHTML('conversao.html','pop-up','Transformação de Material',data)
+    })
+
+    pageStart()
+
+</script>

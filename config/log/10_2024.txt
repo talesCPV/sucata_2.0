@@ -1,0 +1,17 @@
+01/10/2024 15:37 tales@planet3.com.br : Item de Estoque Cadastrado  {}
+01/10/2024 15:39 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"4.20"}
+01/10/2024 15:40 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"5.20"}
+01/10/2024 16:01 tales@planet3.com.br : Empresa Editada  {"id":"139","nome":"ALEXANDRE ESTEVAM DA SILVA2","fantasia":"ALEXANDRE ESTEVAM DA SILVA","tipo":"FIS","cnpj":"111.111.111-11111","ie":"","im":"","end":"1","num":"1","bairro":"1","cep":"11.111-111","cidade":"1","uf":"SP","tel":"","bco_nome":"","bco_ag":"","bco_cc":"","bco_pix":"1","modal":"CLI","whatsapp":""}
+01/10/2024 16:02 tales@planet3.com.br : Empresa Editada  {"id":"139","nome":"ALEXANDRE ESTEVAM DA SILVA","fantasia":"ALEXANDRE ESTEVAM DA SILVA2","tipo":"FIS","cnpj":"111.111.111-11111","ie":"","im":"","end":"1","num":"1","bairro":"1","cep":"11.111-111","cidade":"1","uf":"SP","tel":"","bco_nome":"","bco_ag":"","bco_cc":"","bco_pix":"1","modal":"CLI","whatsapp":""}
+01/10/2024 16:03 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"5.30"}
+01/10/2024 19:41 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"5.20"}
+01/10/2024 19:44 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"5.30"}
+01/10/2024 19:44 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"5.20"}
+01/10/2024 19:44 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"20","und":"KG","val_unit":"5.20"}
+01/10/2024 19:44 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"5.20"}
+01/10/2024 19:45 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.90","und":"KG","val_unit":"5.30"}
+01/10/2024 19:45 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"10","und":"KG","val_unit":"5.30"}
+01/10/2024 19:46 tales@planet3.com.br : Item de Estoque Cadastrado  {"id_local":"6","id_prod":"1","qtd":"45.9","und":"KG","val_unit":"5.30"}
+01/10/2024 20:36 tales@planet3.com.br : Menu Alterado (Produto, adm_produtos.html, pop-up, Produtos)
+01/10/2024 21:55 tales@planet3.com.br : Produto Cadastrado  {"id":0,"nome":"TESTE","und":"Quilo","preco":"1550","margem":"1200","id_mat":"3"}
+01/10/2024 21:57 tales@planet3.com.br : Produto Editado  {"id":"73","nome":"TESTE 2","und":"Quilo","preco":"100","margem":"1200.00","id_mat":"3"}

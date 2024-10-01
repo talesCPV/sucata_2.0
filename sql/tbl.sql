@@ -170,9 +170,9 @@ DROP TABLE IF EXISTS tb_item_estoque;
 CREATE TABLE tb_item_estoque (
   id_local int(11) NOT NULL,
   id_prod int(11) NOT NULL,
-  qtd double unsigned DEFAULT '0',
+  qtd double DEFAULT 0,
   und varchar(10) NOT NULL,
-  val_unit double NOT NULL DEFAULT '0',
+  val_unit double NOT NULL DEFAULT 0,
   PRIMARY KEY (id_local,id_prod),
   FOREIGN KEY (id_prod) REFERENCES tb_prod(id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
