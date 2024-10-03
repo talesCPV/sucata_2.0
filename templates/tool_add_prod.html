@@ -16,12 +16,12 @@
     </div>
     <div class="inline">
         <label for="edtQtd">Qtd</label>
-        <input type="text" id="edtQtd" onfocus="this.select();" inputmode="decimal" onkeyup="return valFloat(this)" value="0">
+        <input type="text" id="edtQtd" onfocus="this.select();" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnAddProd')" value="0">
         <label for="edtPreco">Preço R$</label>
-        <input type="text" id="edtPreco" onfocus="this.select();" inputmode="decimal" onkeyup="return valFloat(this)" value="0">
+        <input type="text" id="edtPreco" onfocus="this.select();" inputmode="decimal" onkeyup="return valFloat(this)" onkeypress="return getEnter(event, 'btnAddProd')" value="0">
     </div>
     <div class="line">
-        <button id="btnAdd"><span class="mdi mdi-cart-plus"></span> OK</button>
+        <button id="btnAddProd"><span class="mdi mdi-cart-plus"></span> OK</button>
     </div>
 </fieldset>
 
@@ -33,90 +33,27 @@
     const pageFunc = main_data.tool_add_prod.func
     const pageScreen = document.querySelector('#card-tool_add_prod')
 
-    function pageStart(){
-
-
-    }
-
     function buscaProd(data){
         pageScreen.querySelector('#edtProd').data = data
-        pageScreen.querySelector('#edtProd').value = data.nome         
+        pageScreen.querySelector('#edtProd').value = data.nome
+        pageScreen.querySelector('#edtQtd').focus()
     }
 
     pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
-        openHTML('adm_produtos.html','pop-up','Selecione um Cliente',{'callback':buscaProd},600)
+        openHTML('adm_produtos.html','pop-up','Produtos',{'callback':buscaProd},600)
     })
 
-    pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
+    pageScreen.querySelector('#btnAddProd').addEventListener('click',()=>{
         if(checkField(['edtProd']) && checkZero(['edtQtd','edtPreco'])){
-
+            if(pageData.hasOwnProperty('callback')){
+                const obj = pageScreen.querySelector('#edtProd').data
+                obj.qtd = pageScreen.querySelector('#edtQtd').value
+                obj.val_unit = pageScreen.querySelector('#edtPreco').value
+                obj.total = (Number(obj.qtd) * Number(obj.val_unit)).toFixed(2)
+                pageData.callback(obj)
+            }
+            closeModal('tool_add_prod')
         }
     })
 
- /*
-    pageScreen.querySelector('#tblAddProd').addEventListener('click',(e)=>{
-        
-        main_data.addProd.select = e.target.parentNode.data
-
-        pageScreen.querySelector('#lblProd').innerHTML = main_data.addProd.select.nome
-        pageScreen.querySelector('#edtQtd').value = ''
-        pageScreen.querySelector('#edtQtd').focus()
-    })
-
-    function check(){
-
-        if(main_data.addProd.select == undefined ){
-            alert('Selecione um produto na lista acima')
-            return false
-        }
-
-        if(parseFloat(pageScreen.querySelector('#edtQtd').value) <= '0'){
-            alert('A quantidade não pode ser igual a 0')
-            pageScreen.querySelector('#edtQtd').focus()
-            return false
-        }
-
-        if(parseFloat(pageScreen.querySelector('#edtPreco').value) <= '0'){
-            alert('O preço não pode ser igual a 0')
-            pageScreen.querySelector('#edtPreco').focus()
-            return false
-        }
-
-        if(main_data.viewLocal.data.mode == 'motorista' && main_data.viewLocal.data.limite == '1'){
-            if(parseFloat(main_data.addProd.select.preco) < parseFloat(pageScreen.querySelector('#edtPreco').value)){
-                alert(`O maior preço permitido para este material é de R$${main_data.addProd.select.preco}`)
-                pageScreen.querySelector('#edtPreco').value = main_data.addProd.select.preco
-                pageScreen.querySelector('#edtPreco').focus()
-                return false
-            }            
-        }
-        return true
-    }
-
-    pageScreen.querySelector('#btnAdicionar').addEventListener('click',()=>{
-                
-        if(check()){
-
-            const params = new Object;
-                params.id = 'DEFAULT'
-                params.id_local = main_data.viewLocal.data.id
-                params.id_prod = main_data.addProd.select.id
-                params.nome = main_data.addProd.select.nome
-                params.qtd = pageScreen.querySelector('#edtQtd').value
-                params.und = main_data.addProd.select.und
-                params.val_venda = pageScreen.querySelector('#edtPreco').value
-            const myPromisse = queryDB(params,36); 
-            myPromisse.then((resolve)=>{
-                main_data.compra.fillTemp()
-                closeModal('addProd')
-            }) 
-
-        }        
-    })
-
-
-    pageScreen.querySelector('#edtFiltro').addEventListener('keyup',()=>{
-        busca()
-    })
-*/
 </script>

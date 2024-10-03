@@ -37,9 +37,9 @@
         if (confirm('Confirma a alteração do ítem?')) {
             if(max_itens() && limite_preco()){
                 if(pageData.hasOwnProperty('callback')){
-                    const qtd = pageScreen.querySelector('#edtQtd').value
-                    const val_unit = pageScreen.querySelector('#edtPreco').value
-                    pageData.callback(pageData.id_local,pageData.id_prod,qtd,pageData.und,val_unit)
+                    pageData.qtd = pageScreen.querySelector('#edtQtd').value
+                    pageData.val_unit = pageScreen.querySelector('#edtPreco').value
+                    pageData.callback(pageData)
                     closeModal('tool_edt_item')
                 }
             }
@@ -75,9 +75,11 @@
     pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
         if (confirm('Deseja realmente deletar este ítem?')) {
             if(pageData.hasOwnProperty('callback')){
-                pageData.callback(pageData.id_local,pageData.id_prod,0,pageData.und,0)
+                pageData.qtd = '0'
+                pageData.val_unit = '0'
+                pageData.callback(pageData)
             }
-        }
+            closeModal('tool_edt_item')        }
     })
 
     pageScreen.querySelector('#edtQtd').addEventListener('focusout',()=>{

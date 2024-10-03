@@ -643,6 +643,73 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
+/* Compras */
+
+ DROP PROCEDURE IF EXISTS sp_set_compra;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_compra(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid int(11),
+		IN Iid_cliente int(11),
+		IN Iid_resp int(11),
+        IN Iid_local int(11),
+		IN Istatus varchar(10),
+		IN Iobs varchar(255),
+		IN Idata datetime		
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iid_cliente=0)THEN
+				DELETE FROM tb_compra WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_compra (id_cliente,id_resp,id_local,status,obs)
+					VALUES(Iid_cliente,Iid_resp,Iid_local,Istatus,Iobs);
+					SELECT MAX(id) FROM tb_compra;
+                ELSE
+					UPDATE tb_compra SET
+                    id_cliente=Iid_cliente,id_resp=Iid_resp,id_local=Iid_local,status=Istatus,obs=Iobs,data=Idata
+                    WHERE id=Iid;
+                    SELECT Iid as id;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_item_compra;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_item_compra(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid int(11),
+		IN Iid_compra int(11),
+		IN Iid_prod int(11),
+		IN Iqtd double,
+		IN Iund varchar(10),
+		IN Ival_unit double,
+		IN Iestorno double
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iqtd=0)THEN
+				DELETE FROM tb_item_compra WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_item_compra (id_compra,id_prod,qtd,und,val_unit,estorno) 
+					VALUES(Iid_compra,Iid_prod,Iqtd,Iund,Ival_unit,Iestorno);
+                ELSE
+					UPDATE tb_item_compra
+                    SET qtd=Iqtd,und=Iund,val_unit=Ival_unit,estorno=Iestorno;
+                END IF;				
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
 /* PRODUTO */
 
 DROP PROCEDURE IF EXISTS sp_view_produto;

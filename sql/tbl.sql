@@ -113,13 +113,14 @@ CREATE TABLE tb_compra (
   id int(11) NOT NULL AUTO_INCREMENT,
   id_cliente int(11) NOT NULL,
   id_resp int(11) NOT NULL,
+  id_local int(11) NOT NULL DEFAULT '3',
   status varchar(10) NOT NULL DEFAULT 'FECHADO',
   obs varchar(255) DEFAULT NULL,
   data datetime DEFAULT CURRENT_TIMESTAMP,
-  id_local int(11) NOT NULL DEFAULT '3',
   PRIMARY KEY (id),
   FOREIGN KEY (id_cliente) REFERENCES tb_clientes(id),
-  FOREIGN KEY (id_resp) REFERENCES tb_usuario(id)
+  FOREIGN KEY (id_resp) REFERENCES tb_usuario(id),
+  FOREIGN KEY (id_local) REFERENCES tb_local(id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_item_compra;
@@ -131,7 +132,6 @@ CREATE TABLE tb_item_compra (
   und varchar(10) NOT NULL,
   val_unit double NOT NULL DEFAULT '0',
   estorno double DEFAULT '0',
-  id_local_origem int(11) DEFAULT '0',
   PRIMARY KEY (id),
   FOREIGN KEY (id_compra) REFERENCES tb_compra(id),
   FOREIGN KEY (id_prod) REFERENCES tb_prod(id)
@@ -177,6 +177,7 @@ CREATE TABLE tb_item_estoque (
   FOREIGN KEY (id_prod) REFERENCES tb_prod(id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+/*
 DROP TABLE IF EXISTS tb_item_temp;
 CREATE TABLE tb_item_temp (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -192,7 +193,7 @@ CREATE TABLE tb_item_temp (
   FOREIGN KEY (id_local) REFERENCES tb_local(id),
   FOREIGN KEY (id_prod) REFERENCES tb_prod(id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
+*/
 
 DROP TABLE IF EXISTS tb_lanc_bancario;
 CREATE TABLE tb_lanc_bancario (

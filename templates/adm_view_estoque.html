@@ -75,17 +75,17 @@
 
     }
 
-    pageFunc.setItem =(id_local,id_prod,qtd,und,valor)=>{
+    pageFunc.setItem =(obj)=>{
         const params = new Object;
-            params.id_local = id_local
-            params.id_prod = id_prod
-            params.qtd = qtd
-            params.und = und
-            params.val_unit = valor
+            params.id_local = obj.id_local
+            params.id_prod = obj.id_prod
+            params.qtd = obj.qtd
+            params.und = obj.und
+            params.val_unit = obj.valor
         const myPromisse = queryDB(params,'ESTQ-1');
         myPromisse.then((resolve)=>{
             if(pageData.hasOwnProperty('callback')){
-                eval(pageData.callback)
+                pageData.callback()
             }
             setLog(`Ítem de Estoque ${qtd==0 ? 'Deletado ': 'Cadastrado '} ${JSON.stringify(params)}`)
             pageFunc.fillItens()            
@@ -125,7 +125,7 @@
     })
 
     pageScreen.querySelector('#btnTrans').addEventListener('click',()=>{        
-        openHTML('transf.html','pop-up','Transferência de Material',{mode:'transf'})
+//        openHTML('transf.html','pop-up','Transferência de Material',{mode:'transf'})
     })
 
     pageScreen.querySelector('#tblLocal').addEventListener('click',()=>{
@@ -139,8 +139,6 @@
     })
 
     pageScreen.querySelector('#btnImp').addEventListener('click',()=>{
-        pageData.callby = 'viewLocal'
-        pageData.peso = pageScreen.querySelector('#via-peso').innerHTML
         print_compra(pageData)
     })
 

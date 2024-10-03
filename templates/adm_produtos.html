@@ -11,8 +11,8 @@
 
         <div class="inline">
             <label for="edtBusca">Nome</label>
-            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
-            <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBuscaProd')">
+            <button id="btnBuscaProd" class="btn-round"><span class="mdi mdi-magnify"></span></button>
             <button id="btnNovo" class="btn-round" >+</button>
 
         </div>
@@ -61,7 +61,7 @@
         })
     }
 
-    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+    pageScreen.querySelector('#btnBuscaProd').addEventListener('click',()=>{
         pageFunc.fillProd()
     })
 
