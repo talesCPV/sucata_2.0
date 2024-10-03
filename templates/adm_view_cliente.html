@@ -198,7 +198,7 @@
             const myPromisse = queryDB(params,'ADM-1');
             myPromisse.then((resolve)=>{
                if(pageData.hasOwnProperty('callback')){
-                    eval(pageData.callback)
+                    pageData.callback()
                 }
                 setLog(`Empresa ${del ? 'Deletada ': novoReg ? 'Cadastrada ':'Editada '} ${JSON.stringify(params)}`)
                 closeModal('adm_view_cliente')

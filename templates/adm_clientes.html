@@ -86,7 +86,7 @@
             pageData.callback(data)
             closeModal('adm_clientes')
         }else{
-            data.callback = 'main_data.adm_clientes.func.fillEmp()'
+            data.callback = pageFunc.fillEmp
             openHTML('adm_view_cliente.html','pop-up',data.id+"-"+data.nome,data)
         }
     })

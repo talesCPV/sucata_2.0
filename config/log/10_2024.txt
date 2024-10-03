@@ -15,3 +15,5 @@
 01/10/2024 20:36 tales@planet3.com.br : Menu Alterado (Produto, adm_produtos.html, pop-up, Produtos)
 01/10/2024 21:55 tales@planet3.com.br : Produto Cadastrado  {"id":0,"nome":"TESTE","und":"Quilo","preco":"1550","margem":"1200","id_mat":"3"}
 01/10/2024 21:57 tales@planet3.com.br : Produto Editado  {"id":"73","nome":"TESTE 2","und":"Quilo","preco":"100","margem":"1200.00","id_mat":"3"}
+03/10/2024 16:12 tales@planet3.com.br : Produto Editado  {"id":"73","nome":"TESTE 23","und":"Quilo","preco":"100.00","margem":"1200.00","id_mat":"3"}
+03/10/2024 16:13 tales@planet3.com.br : Produto Editado  {"id":"73","nome":"TESTE 23","und":"KG","preco":"100.00","margem":"1200.00","id_mat":"3"}

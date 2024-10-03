@@ -28,6 +28,17 @@ function checkField(fields){
     return true
 }
 
+function checkZero(fields){
+    for(let i=0; i< fields.length; i++){
+        if(Number(document.getElementById(fields[i]).value)==0){
+            alert('Alguns campos não podem ter o valor Zero.')
+            document.getElementById(fields[i]).focus()
+            return false
+        }
+    }
+    return true
+}
+
 function checkRepass(fields){
     const check = document.getElementById(fields[0]).value
     for(let i=1; i<fields.length; i++){

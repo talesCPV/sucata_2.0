@@ -39,3 +39,12 @@ CREATE VIEW vw_produto AS
     
 	SELECT * FROM vw_produto;
     
+    
+    
+SELECT * FROM 
+                () AS SEL
+            WHERE qtd_tot > 0;
+            
+            
+
+    

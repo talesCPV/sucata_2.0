@@ -618,6 +618,31 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
+ DROP PROCEDURE IF EXISTS sp_view_item_estq;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_item_estq(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_prod int(11)
+    )
+	BEGIN        
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+
+			SELECT ITEM.*, LOCAL.modelo, PROD.nome, ROUND(SUM(ITEM.qtd),2) AS qtd_tot 
+                FROM tb_item_estoque AS ITEM 
+                INNER JOIN tb_local AS LOCAL
+                INNER JOIN tb_prod AS PROD
+                ON LOCAL.id = ITEM.id_local
+                AND PROD.id = ITEM.id_prod
+                AND ITEM.id_prod=Iid_prod
+                WHERE qtd>0
+                GROUP BY LOCAL.id;
+
+        END IF;
+	END $$
+DELIMITER ;
+
 /* PRODUTO */
 
 DROP PROCEDURE IF EXISTS sp_view_produto;

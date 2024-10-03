@@ -44,18 +44,16 @@
         pageScreen.querySelector('#edtCliente').value = data.nome
     }
 
+    function buscaProd(data){
+        console.log(data)
+    }
+
     pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
         openHTML('adm_clientes.html','pop-up','Selecione um Cliente',{'callback':buscaCli},600)
     })
 
     pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
-        main_data.compra.data.addItem = function(data){
-            
-        }
-
-        main_data.compra.data.callby = 'compra'
-        openHTML('addProd.html','pop-up','Adicione um Produto',main_data.compra.data)
-
+        openHTML('tool_add_prod.html','pop-up','Adicione um Produto',{'callback':buscaProd},600)
     })
 
     pageFunc.fillClientes = ()=>{
@@ -90,33 +88,34 @@
 
         })
     }
-/*
-    main_data.compra.fillTemp()
-    main_data.compra.fillClientes()
-*/
+
+    pageFunc.addTemp = (data)=>{
+        const val_ant = main_data.edtProd.data.val_venda
+        const params = new Object;
+            params.id = main_data.edtProd.data.id 
+            params.id_local = main_data.edtProd.data.id_local
+            params.id_prod = main_data.edtProd.data.id_prod
+            params.nome = main_data.edtProd.data.nome
+            params.qtd = pageScreen.querySelector('#edtQtd').value
+            params.und = main_data.edtProd.data.und
+            params.preco = pageScreen.querySelector('#edtPreco').value
+        const myPromisse = queryDB(params,36);
+                        
+        myPromisse.then((resolve)=>{
+            if(resolve.trim() != ""){
+                setLog(`Alteração de preço de compra: ${main_data.edtProd.data.nome}, de R$${parseFloat(val_ant).toFixed(2)} p/ R$${parseFloat(pageScreen.querySelector('#edtPreco').value).toFixed(2)} em ${main_data.viewLocal.data.modelo}`)
+                main_data.compra.fillTemp()
+                closeModal('edtProd')
+            }  
+        })
+    }
+
     pageScreen.querySelector('#tbl-itens_compra').addEventListener('click',(e)=>{
         
         const data = e.target.parentNode.data
         
         data.edtItem = function(){
-            const val_ant = main_data.edtProd.data.val_venda
-            const params = new Object;
-                params.id = main_data.edtProd.data.id 
-                params.id_local = main_data.edtProd.data.id_local
-                params.id_prod = main_data.edtProd.data.id_prod
-                params.nome = main_data.edtProd.data.nome
-                params.qtd = pageScreen.querySelector('#edtQtd').value
-                params.und = main_data.edtProd.data.und
-                params.preco = pageScreen.querySelector('#edtPreco').value
-            const myPromisse = queryDB(params,36);
-                            
-            myPromisse.then((resolve)=>{
-                if(resolve.trim() != ""){
-                    setLog(`Alteração de preço de compra: ${main_data.edtProd.data.nome}, de R$${parseFloat(val_ant).toFixed(2)} p/ R$${parseFloat(pageScreen.querySelector('#edtPreco').value).toFixed(2)} em ${main_data.viewLocal.data.modelo}`)
-                    main_data.compra.fillTemp()
-                    closeModal('edtProd')
-                }  
-            })                                
+                              
         }
 
         data.delItem = function(){               

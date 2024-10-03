@@ -44,7 +44,7 @@
         "ESTQ-1" => 'CALL sp_set_estoque(@access,@hash,x00,x01,"x02","x03","x04");', // id_local,id_prod,qtd,und,val_unit
         "ESTQ-2" => 'CALL sp_view_produto(@access,@hash,"x00");', // NOME_PRODUTO
         "ESTQ-3" => 'CALL sp_set_produto(@access,@hash,x00,"x01","x02","x03","x04","x05");', // id,nome,und,preco,margem,id_mat
-        
+        "ESTQ-4" => 'CALL sp_view_item_estq(@access,@hash,x00);', // ID_PRODUTO
     );
 
 ?>

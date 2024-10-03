@@ -10,7 +10,7 @@
         <legend>Filtro</legend>
 
         <div class="inline">
-            <label for="edtBusca">por:</label>
+            <label for="edtBusca">Nome</label>
             <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
             <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
             <button id="btnNovo" class="btn-round" >+</button>
@@ -45,9 +45,17 @@
         myPromisse.then((resolve)=>{
             if(resolve.trim() != ""){
                 const json = JSON.parse(resolve);                            
-                tbl.head('Nome,Und.,Compra,Qtd.')
+                if(delivery){
+                    tbl.head('Nome,Und.')
+                }else{
+                    tbl.head('Nome,Und.,Compra,Qtd.')
+                }                
                 for(let i=0; i<json.length;i++){
-                    tbl.plot(json[i],'nome,und,compra,qtd_tot','str,UPP,R$.,str')
+                    if(delivery){
+                        tbl.plot(json[i],'nome,und','str,UPP')
+                    }else{
+                        tbl.plot(json[i],'nome,und,compra,qtd_tot','str,UPP,R$.,str')
+                    }                
                 }                
             } 
         })
@@ -59,8 +67,13 @@
 
     pageScreen.querySelector('#tblProd').addEventListener('click',(e)=>{
         data = e.target.parentNode.data
-        data.callback = pageFunc.fillProd
-        openHTML('adm_view_produto.html','pop-up','Editar Produto',data)
+        if(delivery){
+            pageData.callback(data)
+            closeModal('adm_produtos')
+        }else{
+            data.callback = pageFunc.fillProd
+            openHTML('adm_view_produto.html','pop-up','Editar Produto',data)
+        }
     })
 
     pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{

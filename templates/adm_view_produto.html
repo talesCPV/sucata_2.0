@@ -42,6 +42,7 @@
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtPreco').value = pageData.compra
             pageScreen.querySelector('#edtMargem').value = pageData.venda
+            pageFunc.fillLocal(pageData.id)
         }else{
             pageScreen.querySelector('#edtNome').focus()
         }
@@ -61,8 +62,8 @@
             for(let i=0; i<json.length;i++){
                 const opt = document.createElement('option')
                 opt.innerHTML = json[i].nome
-                opt.value = json[i].nome
-                opt.selected = json[i].nome == pageData.und ? 1 : 0
+                opt.value = json[i].sigla
+                opt.selected = json[i].sigla == pageData.und ? 1 : 0
                 combo.appendChild(opt)
             }         
         })
@@ -92,19 +93,19 @@
 
 
     pageFunc.fillLocal = ()=>{
-        const tbl = pageScreen.getElementById('tblLocal')
+        const tbl = pageScreen.querySelector('#tblLocal')
         tbl.innerHTML = ''
         const params = new Object;
-            params.id_prod = main_data.viewProd.data.id
+            params.id_prod = pageData.id
 
-        const myPromisse = queryDB(params,39);
+        const myPromisse = queryDB(params,'ESTQ-4');
 
         myPromisse.then((resolve)=>{
             if(resolve.trim() != ""){
-                const json = JSON.parse(resolve);                                         
-                tbl.head('Local,Qtd.')
+                const json = JSON.parse(resolve)
+                tbl.head('Local,Qtd.,Und.')
                 for(let i=0; i<json.length;i++){
-                    tbl.plot(json[i],'modelo,qtd_tot','UPP,str')
+                    tbl.plot(json[i],'modelo,qtd_tot,und','UPP,str,Upp')
                 }                
             } 
         })
@@ -131,12 +132,10 @@
 
     }
 
-
-//    main_data.viewProd.fillDetal()
-
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         if(checkField(['edtNome','edtPreco','edtMargem']) ){
-            pageFunc.setProd()        }        
+            pageFunc.setProd()        
+        }        
     })
 
     pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
