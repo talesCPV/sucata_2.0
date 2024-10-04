@@ -5,7 +5,7 @@
         <fieldset>
             <legend>Compra</legend>
             <div class="inline">
-                <label for="edtCliente">Cliente</label>
+                <label for="edtCliente">Cliente *</label>
                 <div class="edtbtn">
                     <input type="text" id="edtCliente" readonly>
                     <button id="btnBusca" class="btn-round"><span class="mdi mdi-magnify"></span></button>
@@ -28,6 +28,8 @@
 
     function pageStart(){
         pageData.itens = JSON.parse(localStorage.getItem('itens'))
+        pageData.status = 'FECHADO'
+        pageData.obs = `Compra realizada dia ${today.getFullDate()} pelo usuário ${localStorage.getItem('email')}.`
         pageFunc.fillItens()
     }
 
@@ -54,14 +56,13 @@
         pageFunc.fillItens()
     }
 
-    pageFunc.setCompra = ()=>{
-        const params = new Object; // cria compra
-            params.id = 0
-            params.id_cliente = pageScreen.querySelector('#cmbCli_compra').value
-            params.id_resp = localStorage.getItem('id_user')
+    pageFunc.setCompra = (id_compra=0)=>{
+        const params = new Object
+            params.id = id_compra
+            params.id_cliente = pageScreen.querySelector('#edtCliente').data.id
             params.id_local = pageData.id
-            params.status = 'FECHADO'
-            params.obs = `Compra realizada dia ${today.getFullDate()} pelo usuário ${localStorage.getItem('email')}.`
+            params.status = pageData.status
+            params.obs = pageData.obs
             params.data = today.getFullDateTime()
         
         const myPromisse =  queryDB(params,'COM-1')
@@ -73,15 +74,17 @@
 
     pageFunc.setItemCompra = (id_compra)=>{
         for(let i=0; i<pageData.itens.length; i++){
-            const params_itens = new Object; // adiciona item compra
-            params_itens.id = 0
-            params_itens.id_compra = id_compra
-            params_itens.id_prod = pageData.itens[i].id
-            params_itens.qtd = pageData.itens[i].qtd
-            params_itens.und = pageData.itens[i].und
-            params_itens.val_unit = pageData.itens[i].val_unit
-            queryDB(params_itens,'COM-2')
+            const params = new Object
+            params.id = 0
+            params.id_compra = id_compra
+            params.id_prod = pageData.itens[i].id
+            params.qtd = pageData.itens[i].qtd
+            params.und = pageData.itens[i].und
+            params.val_unit = pageData.itens[i].val_unit
+            params.estorno = 0 
+            queryDB(params,'COM-2')
         }
+        clearList()
     }
 
     pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
@@ -115,8 +118,10 @@
     })
 
     pageScreen.querySelector('#btnCompra').addEventListener('click',()=>{
-        if(pageScreen.querySelector('#cmbCli_compra').value.trim() != ''){
+        if(checkField(['edtCliente'])){
             if (confirm('Deseja realmente efetuar esta compra?')) {
+                pageFunc.setCompra()
+/*                
                 const now = new Date
                 const params = new Object; // cria compra
                     params.id = 'DEFAULT' 
@@ -181,14 +186,12 @@
 
                     }  
                 })               
+*/                    
             }
 
-        }else{
-            alert('Por favor, selecione um cliente para a compra.')
-            pageScreen.querySelector('#cmbCli_compra').focus()
         }
 
-        
+  
     })
 
     pageScreen.querySelector('#btnClear').addEventListener('click',()=>{

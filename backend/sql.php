@@ -48,7 +48,7 @@
 
         /* COMERCIAL */
         "COM-0" => 'CALL sp_view_compra(@access,@hash,x00);', // 
-        "COM-1" => 'CALL sp_set_compra(@access,@hash,x00,x01,x02,x03,"x04","x05","x06");', // id,id_cliente,id_resp,id_local,status,obs,data
+        "COM-1" => 'CALL sp_set_compra(@access,@hash,x00,x01,x02,"x03","x04","x05");', // id,id_cliente,id_local,status,obs,data
         "COM-2" => 'CALL sp_set_item_compra(@access,@hash,x00,x01,x02,"x03","x04","x05","x06");', // id,id_compra,id_prod,qtd,und,val_unit,estorno
         
 

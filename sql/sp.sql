@@ -652,7 +652,6 @@ DELIMITER $$
 		IN Ihash varchar(64),
 		IN Iid int(11),
 		IN Iid_cliente int(11),
-		IN Iid_resp int(11),
         IN Iid_local int(11),
 		IN Istatus varchar(10),
 		IN Iobs varchar(255),
@@ -660,17 +659,18 @@ DELIMITER $$
     )
 	BEGIN        
 		CALL sp_allow(Iallow,Ihash);
-		IF(@allow)THEN
+		IF(@allow)THEN						
 			IF(Iid_cliente=0)THEN
 				DELETE FROM tb_compra WHERE id=Iid;
             ELSE
 				IF(Iid=0)THEN
+					SET @id_resp = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
 					INSERT INTO tb_compra (id_cliente,id_resp,id_local,status,obs)
-					VALUES(Iid_cliente,Iid_resp,Iid_local,Istatus,Iobs);
-					SELECT MAX(id) FROM tb_compra;
+					VALUES(Iid_cliente,@id_resp,Iid_local,Istatus,Iobs);
+					SELECT MAX(id) AS id FROM tb_compra;
                 ELSE
 					UPDATE tb_compra SET
-                    id_cliente=Iid_cliente,id_resp=Iid_resp,id_local=Iid_local,status=Istatus,obs=Iobs,data=Idata
+                    id_cliente=Iid_cliente,id_local=Iid_local,status=Istatus,obs=Iobs,data=Idata
                     WHERE id=Iid;
                     SELECT Iid as id;
                 END IF;
